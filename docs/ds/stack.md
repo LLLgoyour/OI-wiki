@@ -58,6 +58,81 @@
         # 清空栈
         st[0] = 0
         ```
+    
+    === "Java"
+        ```java
+        int[] st = new int[N];
+        // 这里使用 st[0] 代表栈中元素数量，同时也是栈顶下标
+        
+        // 压栈 ：
+        st[++st[0]] = var1;
+        // 取栈顶 ：
+        int u = st[st[0]];
+        // 弹栈 ：注意越界问题, *st == 0 时不能继续弹出
+        if (st[0] > 0) --st[0];
+        // 清空栈
+        st[0] = 0;
+        ```
+
+对于使用数组模拟的数组，时间复杂度如下：
+-   压栈：O(1)
+-   取栈顶：O(1)
+-   弹栈：O(1)
+-   清空栈：O(1)
+
+## 使用链表模拟栈
+我们也可以使用链表来模拟一个栈，如下：
+???+ note "实现"
+    === "Java"
+        ```java
+        class Node {
+            // 每一个元素节点有两个属性
+            int val;   //值
+            Node next; // 指向下一个节点的指针
+            Node(int val) {
+                this.val = val;
+                this.next = null;
+            }
+        }
+        
+        class Stack {
+            private Node top; // 栈顶节点
+            
+            public Stack() {
+                this.top = null;
+            }
+            
+            // 压栈
+            public void push(int val) {
+                Node newNode = new Node(val);
+                newNode.next = top;
+                top = newNode;
+            }
+            
+            // 取栈顶
+            public int peek() {
+                if (top == null) throw new EmptyStackException();
+                return top.val;
+            }
+            
+            // 弹栈
+            public void pop() {
+                if (top == null) throw new EmptyStackException();
+                top = top.next;
+            }
+            
+            // 清空栈
+            public void clear() {
+                top = null;
+            }
+        }
+        ```
+
+对于使用链表模拟的栈，时间复杂度如下：
+-   压栈：O(1)
+-   取栈顶：O(1)
+-   弹栈：O(1)
+-   清空栈：O(1)
 
 ## C++ STL 中的栈
 
