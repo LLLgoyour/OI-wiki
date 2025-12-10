@@ -1,3 +1,5 @@
+author: Backl1ght, Tiphereth-A, Enter-tainer, Ir1d, ksyx, leoleoasd, Xeonacid, aaron20100919
+
 ## 简介
 
 分块套树状数组在特定条件下可以用来做一些树套树可以做的事情，但是相比起树套树，分块套树状数组代码编写更加简短，更加容易实现。
@@ -44,7 +46,7 @@
 
 ### 空间复杂度
 
-分块分了 $\sqrt n$ 个块，每个块一颗线段树 $O (n)$ 的空间，所以空间复杂度为 $O(n \sqrt n)$。
+分块分了 $\sqrt n$ 个块，每个块一个树状数组 $O(n)$ 的空间，所以空间复杂度为 $O(n \sqrt n)$。
 
 ### 时间复杂度
 
@@ -66,10 +68,11 @@
 
 ??? note "参考代码（分块套树状数组 - 1s）"
     ```cpp
-    #include <bits/stdc++.h>
+    #include <cmath>
+    #include <cstdio>
     using namespace std;
-    const int N = 2e5 + 5;
-    const int M = sqrt(N) + 5;
+    constexpr int N = 2e5 + 5;
+    constexpr int M = 447 + 5;  // sqrt(N) + 5
     
     int n, m, pa[N], pb[N];
     
@@ -148,12 +151,13 @@
     }
     ```
 
-??? node "参考代码（树状数组套 Treap—TLE）"
+??? note "参考代码（树状数组套 Treap—TLE）"
     ```cpp
-    #include <bits/stdc++.h>
+    #include <cstdio>
+    #include <random>
     using namespace std;
-    const int N = 2e5 + 5;
-    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    constexpr int N = 2e5 + 5;
+    mt19937 rng(random_device{}());
     
     int n, m, pa[N], pb[N];
     
@@ -311,10 +315,12 @@
 
 ??? note "参考代码（分块套树状数组 - 78ms）"
     ```cpp
-    #include <bits/stdc++.h>
+    #include <cmath>
+    #include <cstdio>
+    #include <vector>
     using namespace std;
-    const int N = 1e5 + 5;
-    const int M = sqrt(N) + 5;
+    constexpr int N = 1e5 + 5;
+    constexpr int M = 316 + 5;  // sqrt(N) + 5
     
     // 分块
     int nn, b[N], block_size, block_cnt, block_id[N], L[N], R[N], T[M][N];
@@ -418,14 +424,16 @@
 
 ??? note "参考代码（线段树套 Treap-468ms）"
     ```cpp
-    #include <bits/stdc++.h>
+    #include <cstdio>
+    #include <random>
+    #include <vector>
     using namespace std;
-    const int N = 1e5 + 5;
+    constexpr int N = 1e5 + 5;
     
     vector<int> g[N];
     int n, a[N];
     
-    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    mt19937 rng(random_device{}());
     
     struct Treap {
       struct node {

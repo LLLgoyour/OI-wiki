@@ -1,6 +1,8 @@
+author: H-J-Granger, ranwen, abc1763613206, Ahacad, Allenyou1126, AndrewWayne, AngelKitty, AtomAlpaca, Backl1ght, billchenchina, c-forrest, CCXXXI, Cheuring, Chrogeek, ChungZH, countercurrent-time, DepletedPrism, Early0v0, EarthMessenger, Enter-tainer, F1shAndCat, GavinZhengOI, Gesrua, Great-designer, greyqz, Haohu Shen, henryrabbit, heroming, hly1204, Ir1d, isdanni, jiang1997, kenlig, Lewy Zeng, lucifer1004, Menci, muoshuosha, NachtgeistW, needtocalmdown, opsiff, ouuan, ouuan, partychicken, schtonn, Sshwy, sshwy, StudyingFather, SukkaW, Taoran-01, Tiphereth-A, TrisolarisHD, untitledunrevised, Xeonacid, YouXam, Yukimaikoriya
+
 前置知识：[复数](../complex.md)。
 
-本文将介绍一种算法，它支持在 $O(n\log n)$ 的时间内计算两个 $n$ 度的多项式的乘法，比朴素的 $O(n^2)$ 算法更高效。由于两个整数的乘法也可以被当作多项式乘法，因此这个算法也可以用来加速大整数的乘法计算。
+本文将介绍一种算法，它支持在 $O(n\log n)$ 的时间内计算两个 $n$ 次多项式的乘法，比朴素的 $O(n^2)$ 算法更高效。由于两个整数的乘法也可以被当作多项式乘法，因此这个算法也可以用来加速大整数的乘法计算。
 
 ## 引入
 
@@ -13,7 +15,7 @@ B ={}& 7x^2 + 2x + 1 \\
 \end{aligned}
 $$
 
-两个多项式相乘的积 $C = A \times B$，我们可以在 $O(n^2)$ 的时间复杂度中解得（这里 $n$ 为 $A$ 或者 $B$ 多项式的度）：
+两个多项式相乘的积 $C = A \times B$，我们可以在 $O(n^2)$ 的时间复杂度中解得（这里 $n$ 为 $A$ 或者 $B$ 多项式的次数）：
 
 $$
 \begin{aligned}
@@ -84,7 +86,7 @@ $$
 
 如果把序列 $x_n$ 看作多项式 $f(x)$ 的 $x^n$ 项系数，则计算得到的 $X_k$ 恰好是多项式 $f(x)$ 代入单位根 $\mathrm{e}^{\frac{-2\pi \mathrm{i}k}{N}}$ 的点值 $f(\mathrm{e}^{\frac{-2\pi \mathrm{i}k}{N}})$。
 
-这便构成了卷积定理的另一种解释办法，即对多项式进行特殊的插值操作。离散傅里叶变换恰好是多项式在单位根处进行插值。
+这便构成了卷积定理的另一种解释办法，即对多项式进行特殊的求值操作。离散傅里叶变换恰好是多项式在单位根处进行求值。
 
 例如计算：
 
@@ -116,7 +118,7 @@ $$
 \dbinom{n}{3}+\dbinom{n}{7}+\dbinom{n}{11}+\dbinom{n}{15}+\ldots=\frac{2^n+\mathrm{i}(1+\mathrm{i})^n-\mathrm{i}(1-\mathrm{i})^n}{4}
 $$
 
-这道数学题在单位根处插值，恰好构成离散傅里叶变换。
+这道数学题在单位根处求值，恰好构成离散傅里叶变换。
 
 ### 矩阵公式
 
@@ -128,26 +130,26 @@ $$
     X_{1}  \\
     X_{2}  \\
     \vdots \\
-    X_{n-1}
+    X_{N-1}
 \end{bmatrix}
 =
 \begin{bmatrix}
     1      & 1            & 1               & \cdots & 1                   \\
-    1      & \alpha       & \alpha^{2}      & \cdots & \alpha^{n-1}        \\
-    1      & \alpha^{2}   & \alpha^{4}      & \cdots & \alpha^{2(n-1)}     \\
+    1      & \alpha       & \alpha^{2}      & \cdots & \alpha^{N-1}        \\
+    1      & \alpha^{2}   & \alpha^{4}      & \cdots & \alpha^{2(N-1)}     \\
     \vdots & \vdots       & \vdots          & \ddots & \vdots              \\
-    1      & \alpha^{n-1} & \alpha^{2(n-1)} & \cdots & \alpha^{(n-1)(n-1)}
+    1      & \alpha^{N-1} & \alpha^{2(N-1)} & \cdots & \alpha^{(N-1)(N-1)}
 \end{bmatrix}
 \begin{bmatrix}
     x_{0}  \\
     x_{1}  \\
     x_{2}  \\
     \vdots \\
-    x_{n-1}
+    x_{N-1}
 \end{bmatrix}
 $$
 
-其中 $\alpha = \mathrm{e}^{-\mathrm{i}\frac{2\pi}{N}n}$。
+其中 $\alpha = \mathrm{e}^{-\mathrm{i}\frac{2\pi}{N}}$。
 
 ## 快速傅里叶变换
 
@@ -226,14 +228,15 @@ $$
     #include <cmath>
     #include <complex>
     
-    typedef std::complex<double> Comp;  // STL complex
+    using Comp = std::complex<double>;  // STL complex
     
-    const Comp I(0, 1);  // i
-    const int MAX_N = 1 << 20;
+    constexpr Comp I(0, 1);  // i
+    constexpr int MAX_N = 1 << 20;
     
     Comp tmp[MAX_N];
     
-    // rev=1,DFT; rev=-1,IDFT
+    // rev=1, DFT; rev=-1, IDFT
+    // 应用完本函数后需要注意归一化系数的处理
     void DFT(Comp* f, int n, int rev) {
       if (n == 1) return;
       for (int i = 0; i < n; ++i) tmp[i] = f[i];
@@ -249,8 +252,8 @@ $$
       DFT(g, n / 2, rev), DFT(h, n / 2, rev);
       // cur 是当前单位复根，对于 k = 0 而言，它对应的单位复根 omega^0_n = 1。
       // step 是两个单位复根的差，即满足 omega^k_n = step*omega^{k-1}*n，
-      // 定义等价于 exp(I*(2*M_PI/n*rev))
-      Comp cur(1, 0), step(cos(2 * M_PI / n), sin(2 * M_PI * rev / n));
+      // 定义等价于 exp(I*(-2*M_PI/n*rev))
+      Comp cur(1, 0), step(cos(2 * M_PI / n), sin(-2 * M_PI * rev / n));
       for (int k = 0; k < n / 2;
            ++k) {  // F(omega^k_n) = G(omega^k*{n/2}) + omega^k*n\*H(omega^k*{n/2})
         tmp[k] = g[k] + cur * h[k];
@@ -283,9 +286,9 @@ $$
 
 规律：其实就是原来的那个序列，每个数用二进制表示，然后把二进制翻转对称一下，就是最终那个位置的下标。比如 $x_1$ 是 001，翻转是 100，也就是 4，而且最后那个位置确实是 4。我们称这个变换为位逆序置换（bit-reversal permutation），证明留给读者自证。
 
-根据它的定义，我们可以在 $O(n\log n)$ 的时间内求出每个数变换后的结果：
+根据它的定义，我们可以在 $O(n)$ 的时间内求出每个数变换后的结果：
 
-???+ note " 位逆序置换实现（$O(n\log n)$）"
+???+ note "位逆序置换实现（$O(n)$）"
     ```cpp
     /*
      * 进行 FFT 和 IFFT 前的反置变换
@@ -299,19 +302,22 @@ $$
         // 交换互为小标反转的元素，i < j 保证交换一次
         if (i < j) swap(y[i], y[j]);
         // i 做正常的 + 1，j 做反转类型的 + 1，始终保持 i 和 j 是反转的。
-        // 这里 k 代表了 0 出现的最高位。j 先减去高位的全为 1 的数字，知道遇到了
-        // 0，之后再加上即可。
+        // 这里 k 代表了 0 出现的最高位。j 先减去高位的全为 1 的数字，
+        // 直到遇到了 0，之后再加上即可。
+        // 考虑 j 中比特位的翻转次数，最高位将会翻转 n 次，
+        // 第二高位将会翻转 n/2 次，以此类推，所以时间复杂度为：
+        // T(n) = n + n/2 + n/4 + ... = O(n)
         k = len / 2;
         while (j >= k) {
           j = j - k;
           k = k / 2;
         }
-        if (j < k) j += k;
+        j += k;
       }
     }
     ```
 
-实际上，位逆序置换可以 $O(n)$ 从小到大递推实现，设 $len=2^k$，其中 $k$ 表示二进制数的长度，设 $R(x)$ 表示长度为 $k$ 的二进制数 $x$ 翻转后的数（高位补 $0$）。我们要求的是 $R(0),R(1),\cdots,R(n-1)$。
+位逆序置换也可以 $O(n)$ 从小到大递推实现，设 $len=2^k$，其中 $k$ 表示二进制数的长度，设 $R(x)$ 表示长度为 $k$ 的二进制数 $x$ 翻转后的数（高位补 $0$）。我们要求的是 $R(0),R(1),\cdots,R(n-1)$。
 
 首先 $R(0)=0$。
 
@@ -328,7 +334,7 @@ $$
 1.  考虑 $(1100)_2$，我们知道 $R((1100)_2)=R((01100)_2)=(00110)_2$，再右移一位就得到了 $(00011)_2$。
 2.  考虑个位，如果是 $1$，它就要翻转到数的最高位，即翻转数加上 $(10000)_2=2^{k-1}$，如果是 $0$ 则不用更改。
 
-???+ note " 位逆序置换实现（$O(n)$）"
+???+ note "位逆序置换实现（$O(n)$）"
     ```cpp
     // 同样需要保证 len 是 2 的幂
     // 记 rev[i] 为 i 翻转后的值
@@ -528,6 +534,7 @@ $$
       if (on == -1) {
         for (int i = 0; i < len; i++) {
           y[i].x /= len;
+          y[i].y /= len;
         }
       }
     }
@@ -562,12 +569,13 @@ $$
         reverse(y + 1, y + len);
         for (int i = 0; i < len; i++) {
           y[i].x /= len;
+          y[i].y /= len;
         }
       }
     }
     ```
 
-??? "FFT 模板（[HDU 1402 -	A * B Problem Plus](http://acm.hdu.edu.cn/showproblem.php?pid=1402)）"
+??? note "FFT 模板（[HDU 1402 - A * B Problem Plus](http://acm.hdu.edu.cn/showproblem.php?pid=1402)）"
     ```cpp
     --8<-- "docs/math/code/poly/fft/fft_3.cpp"
     ```

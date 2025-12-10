@@ -33,7 +33,7 @@
 代码如下：
 
 ???+ note "实现"
-    ```c++
+    ```cpp
     std::vector<int> G[N];
     int n, fa[N], son[N], sz[N];
     
@@ -98,7 +98,7 @@
 代码如下：
 
 ???+ note "实现"
-    ```c++
+    ```cpp
     // a：子树加标记
     // s：子树和（不算加标记的）
     int a[N], s[N];
@@ -144,13 +144,13 @@
 ## 例题
 
 ??? note "[P4751【模板】"动态 DP"& 动态树分治（加强版）](https://www.luogu.com.cn/problem/P4751)"
-    ```c++
+    ```cpp
     #include <algorithm>
     #include <cstdio>
     #include <cstring>
-    #define MAXN 1000000
-    #define MAXM 3000000
-    #define INF 0x3FFFFFFF
+    constexpr int MAXN = 1000000;
+    constexpr int MAXM = 3000000;
+    constexpr int INF = 0x3FFFFFFF;
     using namespace std;
     
     struct edge {
@@ -164,7 +164,7 @@
     struct Matrix {
       int M[2][2];
     
-      Matrix operator*(const Matrix &B) {
+      Matrix operator*(const Matrix &B) const {
         static Matrix ret;
         for (int i = 0; i < 2; i++)
           for (int j = 0; j < 2; j++) {

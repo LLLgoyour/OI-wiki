@@ -12,7 +12,7 @@
 
 研究多项式算术时先考虑较简单的多项式，幂级数概念仅用于方便理解。到了数学分析中会进一步研究幂级数的敛散性。
 
-环、域及其衍生结构的一般定义详见 [群论简介](../group-theory.md#群的衍生结构)。
+环、域及其衍生结构的一般定义详见 [抽象代数基本概念](../algebra/basic.md)。
 
 对于一般环 $R$，定义 $R$ 上的 **多项式环**（polynomial ring）$R[x]$。
 
@@ -38,9 +38,9 @@ $$
 
 则可得到 **形式幂级数环**（formal power series ring）$R[[x]]$，其中的每个元素 $f$ 称为 **形式幂级数**（formal power series），以下简称幂级数。
 
-### 多项式的度
+### 多项式的次数
 
-对于一个多项式 $f(x)$，称其最高次项的次数为该多项式的 **度（degree）**，也称次数，记作 $\operatorname{deg}{f}$。
+对于一个多项式 $f(x)$，称其最高次项的次数为该多项式的 **次数（degree）**，记作 $\operatorname{deg}{f}$。
 
 ### 多项式的乘法
 
@@ -199,7 +199,7 @@ $$
 n[x^n]f^k=k[x^{n-k}]\left(\dfrac{x}{g}\right)^n
 $$
 
-式中记号 $[x^k]f(x)$ 表示 $f(x)$ 在 $x^k$ 处的系数。
+其中 $[x^k]f(x)$ 表示 $f(x)$ 在 $x^k$ 处的系数。
 
 ### 多项式整除
 
@@ -364,7 +364,7 @@ $$
 
 $$
 \begin{aligned}
-	f(x) g(x) & \equiv 1 \pmod{h(x)}
+    f(x) g(x) & \equiv 1 \pmod{h(x)}
 \end{aligned}
 $$
 
@@ -397,7 +397,7 @@ $$
 
 1.  普通生成函数：$k_n(x)=x^n$。
 2.  指数生成函数：$k_n(x)=\dfrac{x^n}{n!}$。
-3.  狄利克雷生成函数：$k_n(x)=\dfrac{1}{n^x}$。
+3.  [狄利克雷生成函数](../number-theory/dirichlet.md#dirichlet-生成函数)：$k_n(x)=\dfrac{1}{n^x}$。
 
 ## 参考资料与拓展阅读
 

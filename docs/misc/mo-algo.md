@@ -37,9 +37,9 @@ void solve() {
 
 以下的情况在 $n$ 和 $m$ 同阶的前提下讨论。
 
-首先是分块这一步，这一步的时间复杂度是 $O(\sqrt{n}\cdot\sqrt{n}\log\sqrt{n}+n\log n)=O(n\log n)$;
+首先是分块这一步，这一步的时间复杂度是 $O(\sqrt{n}\cdot\sqrt{n}\log\sqrt{n}+n\log n)=O(n\log n)$。
 
-接着就到了莫队算法的精髓了，下面我们用通俗易懂的初中方法来证明它的时间复杂度是 $O(n\sqrt{n})$；
+接着就到了莫队算法的精髓了，下面我们用通俗易懂的初中方法来证明它的时间复杂度是 $O(n\sqrt{n})$。
 
 ???+ note "证明"
     证：令每一块中 $L$ 的最大值为 $\max_1,\max_2,\max_3, \cdots , \max_{\lceil\sqrt{n}\rceil}$。
@@ -62,7 +62,7 @@ void solve() {
     \begin{aligned}
     & O(\sqrt{n}(\max{}_1-1)+\sqrt{n}(\max{}_2-\max{}_1)+\sqrt{n}(\max{}_3-\max{}_2)+\cdots+\sqrt{n}(\max{}_{\lceil\sqrt{n}\rceil}-\max{}_{\lceil\sqrt{n}\rceil-1))} \\
     = \phantom{} & O(\sqrt{n}\cdot(\max{}_1-1+\max{}_2-\max{}_1+\max{}_3-\max{}_2+\cdots+\max{}_{\lceil\sqrt{n}\rceil-1}-\max{}_{\lceil\sqrt{n}\rceil-2}+\max{}_{\lceil\sqrt{n}\rceil}-\max{}_{\lceil\sqrt{n}\rceil-1)}) \\
-    = \phantom{} & O(\sqrt{n}\cdot(\max{}_{\lceil\sqrt{n}\rceil-1}))\\
+    = \phantom{} & O(\sqrt{n}\cdot(\max{}_{\lceil\sqrt{n}\rceil}-1))\\
     \end{aligned}
     $$
     
@@ -70,7 +70,7 @@ void solve() {
     
     由题可知 $\max_{\lceil\sqrt{n}\rceil}$ 最大为 $n$，所以 $L$ 的总时间复杂度最坏情况下为 $O(n\sqrt{n})$。
 
-综上所述，莫队算法的时间复杂度为 $O(n\sqrt{n})$；
+综上所述，莫队算法的时间复杂度为 $O(n\sqrt{n})$。
 
 但是对于 $m$ 的其他取值，如 $m<n$，分块方式需要改变才能变的更优。
 
@@ -78,7 +78,7 @@ void solve() {
 
 我们设块长度为 $S$，那么对于任意多个在同一块内的询问，挪动的距离就是 $n$，一共 $\displaystyle \frac{n}{S}$ 个块，移动的总次数就是 $\displaystyle \frac{n^2}{S}$，移动可能跨越块，所以还要加上一个 $mS$ 的复杂度，总复杂度为 $\displaystyle O\left(\frac{n^2}{S}+mS\right)$，我们要让这个值尽量小，那么就要将这两个项尽量相等，发现 $S$ 取 $\displaystyle \frac{n}{\sqrt{m}}$ 是最优的，此时复杂度为 $\displaystyle O\left(\frac{n^2}{\displaystyle \frac{n}{\sqrt{m}}}+m\left(\frac{n}{\sqrt{m}}\right)\right)=O(n\sqrt{m})$。
 
-事实上，如果块长度的设定不准确，则莫队的时间复杂度会受到很大影响。例如，如果 $m$ 与 $\sqrt n$ 同阶，并且块长误设为 $\sqrt n$，则可以很容易构造出一组数据使其时间复杂度为 $O(n \sqrt n)$ 而不是正确的 $O(n)$。
+事实上，如果块长度的设定不准确，则莫队的时间复杂度会受到很大影响。例如，如果 $m$ 与 $\sqrt n$ 同阶，并且块长误设为 $\sqrt n$，则可以很容易构造出一组数据使其时间复杂度为 $O(n \sqrt n)$ 而不是正确的 $O(n^{5/4})$。
 
 莫队算法看起来十分暴力，很大程度上是因为莫队算法的分块排序方法看起来很粗糙。我们会想到通过看上去更精细的排序方法对所有区间排序。一种方法是把所有区间 $[l, r]$ 看成平面上的点 $(l, r)$，并对所有点建立曼哈顿最小生成树，每次沿着曼哈顿最小生成树的边在询问之间转移答案。这样看起来可以改善莫队算法的时间复杂度，但是实际上对询问分块排序的方法的时间复杂度上界已经是最优的了。
 
@@ -88,7 +88,7 @@ void solve() {
 
 ## 例题 & 代码
 
-???+ note " 例题 [「国家集训队」小 Z 的袜子](https://www.luogu.com.cn/problem/P1494)"
+???+ note "例题 [「国家集训队」小 Z 的袜子](https://www.luogu.com.cn/problem/P1494)"
     题目大意：
     
     有一个长度为 $n$ 的序列 $\{c_i\}$。现在给出 $m$ 个询问，每次给出两个数 $l,r$，从编号在 $l$ 到 $r$ 之间的数中随机选出两个不同的数，求两个数相等的概率。
@@ -105,9 +105,7 @@ void solve() {
 
 对于区间 $[i,i]$，由于区间只有一个元素，我们很容易就能知道答案。然后一步一步从当前区间（已知答案）向下一个区间靠近。
 
-我们设 $col[i]$ 表示当前颜色 $i$ 出现了多少次，$ans$ 当前共有多少种可行的配对方案（有多少种可以选到一双颜色相同的袜子），表示然后每次移动的时候更新答案——设当前颜色为 $k$，如果是增长区间就是 $ans$ 加上 $\dbinom{col[k]+1}{2}-\dbinom{col[k]}{2}$，如果是缩短就是 $ans$ 减去 $\dbinom{col[k]}{2}-\dbinom{col[k]-1}{2}$。
-
-而这个询问的答案就是 $\displaystyle \frac{ans}{\dbinom{r-l+1}{2}}$。
+我们设 $col[i]$ 表示当前颜色 $i$ 出现了多少次，$ans$ 表示当前共有多少种可行的配对方案（有多少种可以选到一双颜色相同的袜子）。然后每次移动的时候更新答案：设当前颜色为 $k$，如果是增长区间就是 $ans$ 加上 $\dbinom{col[k]+1}{2}-\dbinom{col[k]}{2}$；如果是缩短就是 $ans$ 减去 $\dbinom{col[k]}{2}-\dbinom{col[k]-1}{2}$。这个询问的答案就是 $\displaystyle \frac{ans}{\dbinom{r-l+1}{2}}$。
 
 这里有个优化：$\displaystyle \dbinom{a}{2}=\frac{a (a-1)}{2}$。
 
@@ -153,7 +151,7 @@ void solve() {
 
 ### 实现
 
-??? 参考代码
+??? note "参考代码"
     ```cpp
     --8<-- "docs/misc/code/mo-algo/mo-algo_1.cpp"
     ```
@@ -182,16 +180,13 @@ void solve() {
 
 === "压行"
     ```cpp
+    // clang-format off
     // 这里有个小细节等下会讲
-    int unit;  // 块的大小
-    
+    int unit; // 块的大小
     struct node {
       int l, r, id;
-    
-      bool operator<(const node &x) const {
-        return l / unit == x.l / unit
-                   ? (r == x.r ? 0 : ((l / unit) & 1) ^ (r < x.r))
-                   : l < x.l;
+      bool operator < (const node &x) const {
+        return l / unit == x.l / unit ? (r == x.r ? 0 : ((l / unit) & 1) ^ (r < x.r)) : l < x.l;
       }
     };
     ```
@@ -211,7 +206,7 @@ void solve() {
     ```
 
 ???+ warning "小细节"
-    如果使用 `sort` 比较两个函数，不能出现 $a < b$ 和 $b < a$ 同时为真的情况，否则会运行错误。
+    如果使用 `sort` 比较两个结构体，不能出现 $a < b$ 和 $b < a$ 同时为真的情况，否则会运行错误，详见 [常见错误](../contest/common-mistakes.md#会导致-re)。
 
 对于压行版，如果没有 `r == x.r` 的特判，当 l 属于同一奇数块且 r 相等时，会出现上面小细节中的问题（自己手动模拟一下），对于不压行版，如果写成小于（大于）等于，则也会出现同样的问题。
 

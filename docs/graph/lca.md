@@ -45,8 +45,8 @@ author:ouuan, Backl1ght, billchenchina, CCXXXI, ChickenHu, ChungZH, cjsoft, coun
 倍增算法的预处理时间复杂度为 $O(n \log n)$，单次查询时间复杂度为 $O(\log n)$。
 另外倍增算法可以通过交换 `fa` 数组的两维使较小维放在前面。这样可以减少 cache miss 次数，提高程序效率。
 
-??? 例题
-    [HDU 2586 How far away?](https://vjudge.net/problem/HDU-2586) 树上最短路查询。
+??? note "例题"
+    [HDU 2586 How far away?](https://acm.hdu.edu.cn/showproblem.php?pid=2586) 树上最短路查询。
 
 可先求出 LCA，再结合性质 $7$ 进行解答。也可以直接在求 LCA 时求出结果。
 
@@ -71,7 +71,7 @@ Tarjan 算法是一种 **离线算法**，需要使用 [并查集](../ds/dsu.md)
 
 Tarjan 算法需要初始化并查集，所以预处理的时间复杂度为 $O(n)$。
 
-朴素的 Tarjan 算法处理所有 $m$ 次询问的时间复杂度为 $O(m \alpha(m+n, n) + n)$，。但是 Tarjan 算法的常数比倍增算法大。存在 $O(m + n)$ 的实现。
+朴素的 Tarjan 算法处理所有 $m$ 次询问的时间复杂度为 $O(m \alpha(m+n, n) + n)$，但是 Tarjan 算法的常数比倍增算法大。存在 $O(m + n)$ 的实现。
 
 ???+ warning "注意"
     并不存在「朴素 Tarjan LCA 算法中使用的并查集性质比较特殊，单次调用 `find()` 函数的时间复杂度为均摊 $O(1)$」这种说法。
@@ -151,11 +151,11 @@ LCA 为两个游标跳转到同一条重链上时深度较小的那个游标所�
 
 树链剖分的预处理时间复杂度为 $O(n)$，单次查询的时间复杂度为 $O(\log n)$，并且常数较小。
 
-### [动态树](../ds/lct.md)
+### Link Cut Tree
 
-设连续两次 [access](../ds/lct.md#access) 操作的点分别为 `u` 和 `v`，则第二次 [access](../ds/lct.md#access) 操作返回的点即为 `u` 和 `v` 的 LCA.
+在 [Link Cut Tree](../ds/lct.md) 中，设连续两次 [access](../ds/lct.md#access) 操作的点分别为 `u` 和 `v`，则第二次 [access](../ds/lct.md#access) 操作返回的点即为 `u` 和 `v` 的 LCA.
 
-在无 link 和 cut 等操作的情况下，使用 link cut tree 单次查询的时间复杂度为 $O(\log n)$。
+在无 link 和 cut 等操作的情况下，使用 Link Cut Tree 单次查询的时间复杂度为 $O(\log n)$。
 
 ### 标准 RMQ
 

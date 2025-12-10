@@ -63,7 +63,7 @@ author: HeRaNO, Xeonacid, AzurIce
 ```cpp
 void up(int x) {
   while (x > 1 && h[x] > h[x / 2]) {
-    swap(h[x], h[x / 2]);
+    std::swap(h[x], h[x / 2]);
     x /= 2;
   }
 }
@@ -134,7 +134,7 @@ void build_heap_2() {
 
 ### 对顶堆
 
-??? note "[SP16254 RMID2 - Running Median Again](https://www.luogu.com.cn/problem/SP16254)"
+??? note "[SPOJ RMID2 - Running Median Again](https://www.spoj.com/problems/RMID2/)"
     维护一个序列，支持两种操作：
     
     1.  向序列中插入一个元素
@@ -156,10 +156,12 @@ void build_heap_2() {
 
 显然，查询第 $k$ 大元素的时间复杂度是 $O(1)$ 的。由于插入、删除或调整 $k$ 值后，小根堆的大小与期望的 $k$ 值最多相差 $1$，故每次维护最多只需对大根堆与小根堆中的元素进行一次调整，因此，这些操作的时间复杂度都是 $O(\log n)$ 的。
 
-??? "参考代码"
+??? note "参考代码"
     ```cpp
     --8<-- "docs/ds/code/binary-heap/binary-heap_1.cpp"
     ```
 
--   双倍经验：[SP15376 RMID - Running Median](https://www.luogu.com.cn/problem/SP15376)
--   典型习题：[P1801 黑匣子](https://www.luogu.com.cn/problem/P1801)
+### 习题
+
+-   [SPOJ RMID - Running Median](https://www.spoj.com/problems/RMID)
+-   [洛谷 P1801 黑匣子](https://www.luogu.com.cn/problem/P1801)

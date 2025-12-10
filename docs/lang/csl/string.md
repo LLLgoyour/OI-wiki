@@ -41,9 +41,9 @@ printf("%s", s.c_str());  // 一定能够正确输出
 很多函数都可以返回 string 的长度：
 
 ```cpp
-printf("s 的长度为 %lu", s.size());
-printf("s 的长度为 %lu", s.length());
-printf("s 的长度为 %lu", strlen(s.c_str()));
+printf("s 的长度为 %zu", s.size());
+printf("s 的长度为 %zu", s.length());
+printf("s 的长度为 %zu", strlen(s.c_str()));
 ```
 
 ???+ note "这些函数的复杂度"
@@ -51,7 +51,7 @@ printf("s 的长度为 %lu", strlen(s.c_str()));
     
     `size()` 和 `length()` 的复杂度在 C++98 中没有指定，在 C++11 中被指定为常数复杂度。但在常见的编译器上，即便是 C++98，这两个函数的复杂度也是常数。
 
-???+ warning
+???+ warning "Warning"
     这三个函数（以及下面将要提到的 `find` 函数）的返回值类型都是 `size_t`（`unsigned long`）。因此，这些返回值不支持直接与负数比较或运算，建议在需要时进行强制转换。
 
 ### 寻找某字符（串）第一次出现的位置
@@ -97,7 +97,7 @@ printf("从字符串 t 的第二位开始的最多三个字符构成的子串是
 输出：
 
 ```text
-从字符串 s 的第二位开始的最多三个字符构成的子串是 Wik
+从字符串 s 的第四位开始的最多三个字符构成的子串是 Wik
 从字符串 t 的第二位开始的最多三个字符构成的子串是 I
 ```
 

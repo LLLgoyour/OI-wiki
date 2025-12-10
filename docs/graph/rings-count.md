@@ -28,7 +28,7 @@
     
     所以定向后图肯定不存在环。
     
-    事实上，上述定向规则满足严格偏序的条件，所以按此规则构造的图（也即该偏序的 Hasse 图）一定是一个 DAG。
+    事实上，可以根据上述定向规则构造一个 [偏序](../math/order-theory.md#二元关系)，所以按此规则构造的图（也即该偏序的 [Hasse 图](../math/order-theory.md#偏序集的可视化表示hasse-图)）一定是一个 DAG。
 
 枚举 $u$ 和 $u$ 指向的点 $v$，再在 $v$ 指向的点中枚举 $w$，检验 $u$ 是否与 $w$ 相连即可。
 
@@ -47,14 +47,14 @@
     
     事实上，如果定向时从度数大的点指向度数小的点，复杂度也正确，只需要交换 $u,\ w$ 两个点，上述证明也成立。
 
-???+ note " 示例代码（[洛谷 P1989 无向图三元环计数](https://www.luogu.com.cn/problem/P1989)）"
+???+ note "示例代码（[洛谷 P1989 无向图三元环计数](https://www.luogu.com.cn/problem/P1989)）"
     ```cpp
     --8<-- "docs/graph/code/rings-count/rings-count_2.cpp"
     ```
 
 ### 例题 2
 
-???+ note "[HDU 6184 Counting Stars](https://vjudge.net/problem/HDU-6184)"
+???+ note "[HDU 6184 Counting Stars](https://acm.hdu.edu.cn/showproblem.php?pid=6184)"
     给定一张有 $n$ 个点和 $m$ 条边的无向图，求下面图形的出现次数。
     
     ![](./images/rings-count1.svg)
@@ -85,7 +85,7 @@
 
 另外，度数相同的结点的排名将不相同，并且需要注意判断 $a\neq c$。
 
-???+ note " 示例代码（[LibreOJ P191 无向图四元环计数](https://loj.ac/p/191)）"
+???+ note "示例代码（[LibreOJ P191 无向图四元环计数](https://loj.ac/p/191)）"
     ```cpp
     --8<-- "docs/graph/code/rings-count/rings-count_4.cpp"
     ```

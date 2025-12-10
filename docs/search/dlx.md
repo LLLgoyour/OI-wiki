@@ -108,12 +108,16 @@ $$
       for (int j = m; j >= 1; --j) num[i] = num[i] << 1 | a[i][j];
     for (int state = 0; state < 1 << n; ++state) {
       int tmp = 0;
+      bool flag = true;
       for (int i = 1; i <= n; ++i)
         if ((1 << i - 1) & state) {
-          if (tmp & num[i]) break;
+          if (tmp & num[i]) {
+            flag = false;
+            break;
+          }
           tmp |= num[i];
         }
-      if (tmp == (1 << m) - 1) {
+      if (flag && tmp == (1 << m) - 1) {
         ok = 1;
         for (int i = 1; i <= n; ++i)
           if ((1 << i - 1) & state) printf("%d ", i);
@@ -283,7 +287,7 @@ $$
 
     答案即为被删除的三行：$1, 4, 5$。
 
-**强烈建议自己模拟一遍矩阵删除、还原与回溯的过程后，再接着阅读下文。**
+强烈建议自己模拟一遍矩阵删除、还原与回溯的过程后，再接着阅读下文。
 
 通过上述步骤，可将 X 算法的流程概括如下：
 
@@ -317,15 +321,15 @@ Donald E. Knuth 想到了用双向十字链表来维护这些操作。
 
 双向十字链表中存在四个指针域，分别指向上、下、左、右的元素；且每个元素 $i$ 在整个双向十字链表系中都对应着一个格子，因此还要表示 $i$ 所在的列和所在的行，如图所示：
 
-![dlx-1](./images/dlx-1.png)
+![dlx-1.svg](./images/dlx-1.svg)
 
 大型的双向链表则更为复杂：
 
-![dlx-2](./images/dlx-2.png)
+![dlx-2.svg](./images/dlx-2.svg)
 
 每一行都有一个行首指示，每一列都有一个列指示。
 
-行首指示为 `first[]`，列指示是我们虚拟出的 $c + 1$ 个结点。
+行首指示为 `first[]`，列指示是我们新建的 $c + 1$ 个哨兵结点。值得注意的是，**行首指示并非是链表中的哨兵结点**。它是虚拟的，类似于邻接表中的 `first[]` 数组，**直接指向** 这一行中的首元素。
 
 同时，每一列都有一个 `siz[]` 表示这一列的元素个数。
 
@@ -351,7 +355,7 @@ int col[MS], row[MS];
 
 即 `L[R[c]] = L[c], R[L[c]] = R[c];`。
 
-![dlx-3.png](./images/dlx-3.png)
+![dlx-3.svg](./images/dlx-3.svg)
 
 然后顺着这一列往下走，把走过的每一行都删掉。
 
@@ -364,7 +368,7 @@ int col[MS], row[MS];
 
 即 `U[D[j]] = U[j], D[U[j]] = D[j], --siz[col[j]];`。
 
-![dlx-4.png](./images/dlx-4.png)
+![dlx-4.svg](./images/dlx-4.svg)
 
 `remove` 函数的代码实现如下：
 
@@ -408,11 +412,11 @@ int col[MS], row[MS];
 
 第 $i$ 个点的左结点为 $i - 1$，右结点为 $i + 1$，上结点为 $i$，下结点为 $i$。特殊地，$0$ 结点的左结点为 $c$，$c$ 结点的右结点为 $0$。
 
-于是我们得到了一条链：
+于是我们得到了一个环状双向链表：
 
-![dlx-5.png](./images/dlx-5.png)
+![dlx-5.svg](./images/dlx-5.svg)
 
-这样就初始化了一个 Dancing Link。
+这样就初始化了一个 Dancing Links。
 
 `build(r, c)` 的代码实现如下：
 
@@ -476,7 +480,7 @@ int col[MS], row[MS];
 
 `insert(r, c)` 这个操作可以通过图片来辅助理解：
 
-![dlx-6.png](./images/dlx-6.png)
+![dlx-6.svg](./images/dlx-6.svg)
 
 留心曲线箭头的方向。
 
@@ -514,18 +518,18 @@ int col[MS], row[MS];
       int i, j, c = R[0];
       if (!R[0]) {
         ans = dep;
-        return 1;
+        return true;
       }
       IT(i, R, 0) if (siz[i] < siz[c]) c = i;
       remove(c);
       IT(i, D, c) {
         stk[dep] = row[i];
         IT(j, R, i) remove(col[j]);
-        if (dance(dep + 1)) return 1;
+        if (dance(dep + 1)) return true;
         IT(j, L, i) recover(col[j]);
       }
       recover(c);
-      return 0;
+      return false;
     }
     ```
 
@@ -552,7 +556,7 @@ DLX 递归及回溯的次数与矩阵中 $1$ 的个数有关，与矩阵的 $r, 
 
 DLX 的难点，不全在于链表的建立，而在于建模。
 
-**请确保已经完全掌握 DLX 模板后再继续阅读本文。**
+请确保已经完全掌握 DLX 模板后再继续阅读本文。
 
 我们每拿到一个题，应该考虑行和列所表示的意义：
 
@@ -651,9 +655,7 @@ DLX 的难点，不全在于链表的建立，而在于建模。
 
 ## 外部链接
 
--   [夜深人静写算法（九）- Dancing Links X（跳舞链）\_WhereIsHeroFrom 的博客》](https://blog.csdn.net/whereisherofrom/article/details/79220897)
 -   [跳跃的舞者，舞蹈链（Dancing Links）算法——求解精确覆盖问题 - 万仓一黍](https://www.cnblogs.com/grenet/p/3145800.html)
--   [DLX 算法一览 - zhangjianjunab](https://blog.csdn.net/zhangjianjunab/article/details/83688681)
 -   [搜索：DLX 算法 - 静听风吟。](https://www.cnblogs.com/aininot260/p/9629926.html)
 -   [《算法竞赛入门经典 - 训练指南》](https://book.douban.com/subject/35431537/)
 

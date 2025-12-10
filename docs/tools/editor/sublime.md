@@ -42,7 +42,7 @@ ST 并不支持中文，如需中文需要安装汉化插件。
 
 ![](./images/sublime3-1.png)
 
-输入 `Chinese` 选择 ChineseLocalizationgs 并回车，等待安装完毕，完成后界面会自动切换为中文（如是 ST4，因为汉化插件未更新，会少一些新增的菜单项，但一般对编辑无影响）。
+输入 `Chinese` 选择 ChineseLocalizations 并回车，等待安装完毕，完成后界面会自动切换为中文（如是 ST4，因为汉化插件未更新，会少一些新增的菜单项，但一般对编辑无影响）。
 
 ### 调整字体
 
@@ -50,7 +50,7 @@ ST 并不支持中文，如需中文需要安装汉化插件。
 
 一般而言，如果单论对中文的显示的话，Microsoft Yahei Consolas 和 Microsoft YaHei Mono 是比较好的选择。
 
-???+ warning
+???+ warning "Warning"
     注意任何设置（包括插件设置）即使能也不要在左边的的默认设置中修改，这是不被推荐的，如果软件（或插件）更新，默认设置会被重置。
 
 ### 安装插件与主题
@@ -129,40 +129,40 @@ ST 的 Vintage 插件与 Vi 有一定不同，部分列于此处：
 
 ```JSON
 {
-	//字体大小
-	"font_size": 11,
-	
-	//字体，可以不设置，默认为 Consolas
-	"font_face": "",
-	
-	//Tab自动转换为空格
-	"translate_tabs_to_spaces": true,
-	
-	//缩进宽度
-	"tab_size": 4,
-	
-	//行高亮
-	"highlight_line": true,
-	
-	//保存时自动在文件尾增加换行
-	"trim_trailing_white_space_on_save": true,
-	
-	//在选择时查找自动只查找选择范围
-	"auto_find_in_selection": true,
-	
-	//禁用了OI中不太可能用到的插件，可以自己调整
-	"ignored_packages": [
-		"ActionScript", "AppleScript", "ASP", "Batch File", "C#", 
-		"Clojure", "CSS", "D", "Diff", "Erlang", "Git Formats", 
-		"Go", "Graphviz", "Groovy", "Haskell", "HTML", "Java", 
-		"LaTeX", "Lisp", "Lua", "Makefile", "Matlab", 
-		"Objective-C", "OCaml", "Perl", "PHP", "Python", 
-		"R","Rails", "RestructuredText", "Ruby", "Rust", 
-		"Scala", "ShellScript", "SQL", "TCL", "Textile", "XML", 
-	],
-    
-	//相对行号，可配合 Vintage 插件快速跳转
-	"relative_line_numbers": false,
+  //字体大小
+  "font_size": 11,
+  
+  //字体，可以不设置，默认为 Consolas
+  "font_face": "",
+  
+  //Tab自动转换为空格
+  "translate_tabs_to_spaces": true,
+  
+  //缩进宽度
+  "tab_size": 4,
+  
+  //行高亮
+  "highlight_line": true,
+  
+  //保存时自动在文件尾增加换行
+  "trim_trailing_white_space_on_save": true,
+  
+  //在选择时查找自动只查找选择范围
+  "auto_find_in_selection": true,
+  
+  //禁用了OI中不太可能用到的插件，可以自己调整
+  "ignored_packages": [
+    "ActionScript", "AppleScript", "ASP", "Batch File", "C#", 
+    "Clojure", "CSS", "D", "Diff", "Erlang", "Git Formats", 
+    "Go", "Graphviz", "Groovy", "Haskell", "HTML", "Java", 
+    "LaTeX", "Lisp", "Lua", "Makefile", "Matlab", 
+    "Objective-C", "OCaml", "Perl", "PHP", "Python", 
+    "R","Rails", "RestructuredText", "Ruby", "Rust", 
+    "Scala", "ShellScript", "SQL", "TCL", "Textile", "XML", 
+  ],
+  
+  //相对行号，可配合 Vintage 插件快速跳转
+  "relative_line_numbers": false,
 }
 ```
 
@@ -188,31 +188,31 @@ ST 的 Vintage 插件与 Vi 有一定不同，部分列于此处：
 
 ```JSON
 {
-	//在匹配的括号之间行的行首显示一条线，可以快速找到括号的范围
-	"content_highlight_bar": true,
-
-	//在小地图中显示匹配的括号
-	"show_in_minimap": true,
-
-	//忽略匹配范围限制
-	"ignore_threshold": true,
-    
-	//style高亮样式，bold为块高亮，underline为加粗下划线，outline为外围一圈
-	//color为颜色，默认设置中已经包含了所有支持的颜色
-	//icon为在侧边栏显示的标志
-	"bracket_styles": {
-		"default": {"icon": "dot", "color": "region.yellowish", "style": "bold",},
-		"unmatched": {"icon": "question", "color": "region.redish", "style": "outline",},
-		"curly": {"icon": "curly_bracket", "color": "region.purplish",},
-		"round": {"icon": "round_bracket", "color": "region.yellowish",},
-		"square": {"icon": "square_bracket", "color": "region.bluish",},
-		"angle": {"icon": "angle_bracket", "color": "region.orangish",},
-		"tag": {"icon": "tag", "color": "region.orangish",},
-		"c_define": {"icon": "hash", "color": "region.yellowish",},
-		"single_quote": {"icon": "single_quote", "color": "region.greenish",},
-		"double_quote": {"icon": "double_quote", "color": "region.greenish",},
-		"regex": {"icon": "star", "color": "region.greenish",}
-	}
+  //在匹配的括号之间行的行首显示一条线，可以快速找到括号的范围
+  "content_highlight_bar": true,
+  
+  //在小地图中显示匹配的括号
+  "show_in_minimap": true,
+  
+  //忽略匹配范围限制
+  "ignore_threshold": true,
+  
+  //style高亮样式，bold为块高亮，underline为加粗下划线，outline为外围一圈
+  //color为颜色，默认设置中已经包含了所有支持的颜色
+  //icon为在侧边栏显示的标志
+  "bracket_styles": {
+    "default": {"icon": "dot", "color": "region.yellowish", "style": "bold",},
+    "unmatched": {"icon": "question", "color": "region.redish", "style": "outline",},
+    "curly": {"icon": "curly_bracket", "color": "region.purplish",},
+    "round": {"icon": "round_bracket", "color": "region.yellowish",},
+    "square": {"icon": "square_bracket", "color": "region.bluish",},
+    "angle": {"icon": "angle_bracket", "color": "region.orangish",},
+    "tag": {"icon": "tag", "color": "region.orangish",},
+    "c_define": {"icon": "hash", "color": "region.yellowish",},
+    "single_quote": {"icon": "single_quote", "color": "region.greenish",},
+    "double_quote": {"icon": "double_quote", "color": "region.greenish",},
+    "regex": {"icon": "star", "color": "region.greenish",}
+  }
 }
 ```
 
@@ -232,8 +232,8 @@ ST 的 Vintage 插件与 Vi 有一定不同，部分列于此处：
 
 ```XML
 <snippet>
-	<description>template_code</description> <!-- 这里的内容是补全内容的预览 -->
-	<content><![CDATA[#include <cstdio>
+  <description>template_code</description> <!-- 这里的内容是补全内容的预览 -->
+  <content><![CDATA[#include <cstdio>
 using namespace std;
 
 int main() {
@@ -244,8 +244,8 @@ int main() {
   fclose(stdout);
   return 0;
 }]]></content>
-	<tabTrigger>code</tabTrigger> <!-- 这里的内容是补全的触发文本 -->
-	<scope>source.c++</scope> <!-- 这里的内容是补全适用语言 -->
+  <tabTrigger>code</tabTrigger> <!-- 这里的内容是补全的触发文本 -->
+  <scope>source.c++</scope> <!-- 这里的内容是补全适用语言 -->
 </snippet>
 ```
 
@@ -345,7 +345,7 @@ Snippet 类型的补全一般会有一些编辑块，补全后会自动选择为
 
 如果要把以下代码中的所有 `bok` 改为 `book`，只需将光标放置在任意一个 `bok` 中，长按<kbd>Ctrl</kbd>+<kbd>D</kbd>即可快速选中。
 
-```C++
+```cpp
 int check() {
   book[1] = 1, book[2] = 1, book[3] = 1, bok[1] = 1, bok[2] = 1, bok[3] = 1,
   bok[4] = 1, bok[5] = 1;
@@ -356,7 +356,7 @@ int check() {
 
 或选中 `"a` 并按住<kbd>Ctrl</kbd>+<kbd>D</kbd>，然后按<kbd>Right</kbd>、<kbd>Ctrl</kbd>+<kbd>D</kbd>，之后键入即可。
 
-```C++
+```cpp
 s[1] = "aaa";
 s[2] = "aab";
 s[3] = "aac";
@@ -375,7 +375,7 @@ a + b*a + b*a + b
 
 如果要将下列文件中的所有等号后面改成 `"good"`，也可以用<kbd>Ctrl</kbd>+<kbd>H</kbd>使用替换，打开正则，输入 `".*"`，并替换成 `"good"` 即可。
 
-```C++
+```cpp
 s[1] = "aaa";
 s[2] = "aab";
 s[3] = "aac";
@@ -422,14 +422,14 @@ Windows 环境下需要将 g++ 所在目录添加到环境变量中，并重启 
 
 ST 默认的编译选项为 `g++ "${file}" -o "${file_path}/${file_base_name}"`，如果要修改编译选项，可以新建一个编译系统。
 
-进入 `系统->编译系统->新建编译系统…` 然后在大括号中间输入：
+进入 `工具->编译系统->新建编译系统…` 然后在大括号中间输入：
 
 ```JSON
-//编译选项可以自己调整
-"cmd": ["cmd","/c","g++","-Wall","${file}","-o","${file_path}/${file_base_name}"
-	,"&&","cmd","/c","${file_path}/${file_base_name}"],  //这部分为运行
+// 编译选项可以自己调整
+// 编译并运行
+"shell_cmd": "g++ -Wall \"${file}\" -o \"${file_path}/${file_base_name}.exe\" && \"${file_path}/${file_base_name}.exe\"",
 
-//这一行可以让ST3图形化显示报错，如果习惯了看g++返回的信息可以去掉
+// 这一行可以让ST3图形化显示报错，如果习惯了看g++返回的信息可以去掉
 "file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
 ```
 
@@ -443,7 +443,7 @@ ST 默认的编译选项为 `g++ "${file}" -o "${file_path}/${file_base_name}"`�
 
 运行结束后会提示程序的运行时间，其计时为从按下<kbd>Ctrl</kbd>+<kbd>B</kbd>到全部 CMD 命令运行结束的时间，也就是说包括编译的时间和输入的时间，以及如果在外部 CMD 运行还包括 CMD 开启关闭的时间。
 
-???+ warning
+???+ warning "Warning"
     这个窗口无法输入<kbd>F6</kbd>或<kbd>Ctrl</kbd>+<kbd>Z</kbd>，如果运行读入到文件末尾的程序请使用文件输入，或配置在外部 CMD 运行。
 
 ### 调试

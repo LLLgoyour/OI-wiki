@@ -143,15 +143,21 @@ $$
 
 $$
 \begin{aligned}
-F(x)&=\frac{x}{1-(x+x^2)}\\
-&=\sum_{n\ge 0}(x+x^2)^n\\
-&=\sum_{n\ge 0}\sum_{i=0}^n\binom{n}{i}x^{2i}x^{n-i}\\
-&=\sum_{n\ge 0}\sum_{i=0}^n\binom{n}{i}x^{n+i}\\
-&=\sum_{n\ge 0}x^n\sum_{i=0}^n\binom{n-i}{i}
+F(x) &= \dfrac{x}{1-(x+x^2)} \\
+&= x\sum_{k=0}^{\infty}(x+x^2)^k \\
+&= x\sum_{k=0}^{\infty}\sum_{i=0}^k\binom{k}{i}x^{k-i}(x^2)^i \\
+&= \sum_{k=0}^{\infty}\sum_{i=0}^k\binom{k}{i}x^{k+i+1} \\
+&= \sum_{n=1}^{\infty}\sum_{i=0}^{\lfloor(n-1)/2\rfloor}\binom{n-i-1}{i}x^n.
 \end{aligned}
 $$
 
-我们得到了 $a_n$ 的通项公式，但那并不是我们熟知的有关黄金分割比的形式。
+最后一步中，令 $n=k+i+1$ 并更换求和顺序。由此，可以得到通项公式：
+
+$$
+a_n = \sum_{i=0}^{\lfloor(n-1)/2\rfloor}\binom{n-i-1}{i}.
+$$
+
+这并不是我们熟知的有关黄金分割比的形式。
 
 ### 展开方式二
 
@@ -246,7 +252,7 @@ $$
 
 ## 卡特兰数的生成函数
 
-参考 [Catalan 数的封闭形式](../combinatorics/catalan.md#封闭形式)
+参考 [Catalan 数形式的代数推演](../combinatorics/catalan.md#代数推演)。
 
 ## 应用
 
@@ -254,7 +260,7 @@ $$
 
 ### 食物
 
-???+ note "[食物](https://darkbzoj.tk/problem/3028)"
+???+ note "[食物](https://hydro.ac/p/bzoj-P3028)"
     在许多不同种类的食物中选出 $n$ 个，每种食物的限制如下：
     
     1.  承德汉堡：偶数个
@@ -298,7 +304,7 @@ $$
 
 ### Sweet
 
-???+ note "[「CEOI2004」Sweet](https://darkbzoj.tk/problem/3027)"
+???+ note "[「CEOI2004」Sweet](https://hydro.ac/p/bzoj-P3027)"
     有 $n$ 堆糖果。不同的堆里糖果的种类不同（即同一个堆里的糖果种类是相同的，不同的堆里的糖果的种类是不同的）。第 $i$ 个堆里有 $m_i$ 个糖果。现在要吃掉至少 $a$ 个糖果，但不超过 $b$ 个。求有多少种方案。
     
     两种方案不同当且仅当吃的个数不同，或者吃的糖果中，某一种糖果的个数在两个方案中不同。

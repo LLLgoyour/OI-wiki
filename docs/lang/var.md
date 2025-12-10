@@ -18,10 +18,15 @@ C++ 的类型系统由如下几部分组成：
 
 一般情况下，一个 `bool` 类型变量占有 $1$ 字节（一般情况下，$1$ 字节 =$8$ 位）的空间。
 
+???+ tip "Tip"
+    可通过头文件 `<climits>`(C++)/`<limits.h>`(C) 中的宏常量 `CHAR_BIT` 获取字节的位数。
+
 ???+ note "C 语言的布尔类型"
+    另请参阅 [C++ 与其他常用语言的区别 - bool](./cpp-other-langs.md#bool)。
+    
     C 语言最初是没有布尔类型的，直到 C99 时才引入 `_Bool` 关键词作为布尔类型，其被视作无符号整数类型。
     
-    ???+ note
+    ???+ note "Note"
         C 语言的 `bool` 类型从 C23 起不再使用整型的零与非零值定义，而是定义为足够储存 `true` 和 `false` 两个常量的类型。
     
     为方便使用，`stdbool.h` 中提供了 `bool`,`true`,`false` 三个宏，定义如下：
@@ -33,6 +38,8 @@ C++ 的类型系统由如下几部分组成：
     ```
     
     这些宏于 C23 中移除，并且 C23 起引入 `true`,`false` 和 `bool` 作为关键字，同时保留 `_Bool` 作为替代拼写形式[^note10]。
+    
+    另外，C23 起还可以通过 `<limits.h>` 中的宏常量 `BOOL_WIDTH` 获取布尔类型的位宽。
 
 ### 整数类型
 
@@ -49,7 +56,7 @@ C++ 标准保证 `1 == sizeof(char) <= sizeof(short) <= sizeof(int) <= sizeof(lo
 
 由于历史原因，整数类型的位宽有多种流行模型，为解决这一问题，C99/C++11 引入了 [定宽整数类型](#定宽整数类型)。
 
-???+ note "`int` 类型的大小 "
+???+ note "`int` 类型的大小"
     在 C++ 标准中，规定 `int` 的位数 **至少** 为 $16$ 位。
     
     事实上在现在的绝大多数平台，`int` 的位数均为 $32$ 位。
@@ -97,6 +104,82 @@ C++ 标准保证 `1 == sizeof(char) <= sizeof(short) <= sizeof(int) <= sizeof(lo
     例如 `int`，`signed`，`int signed`，`signed int` 表示同一类型，而 `unsigned long` 和 `unsigned long int` 表示同一类型。
 
 另外，一些编译器实现了扩展整数类型，如 GCC 实现了 128 位整数：有符号版的 `__int128_t` 和无符号版的 `__uint128_t`，如果您在比赛时想使用这些类型，**请仔细阅读比赛规则** 以确定是否允许或支持使用扩展整数类型。
+
+???+ warning "注意"
+    STL 不一定对扩展整数类型有足够的支持，故使用扩展整数类型时需格外小心。
+    
+    ???+ note "示例代码"
+        ```cpp
+        #include <cmath>
+        #include <iostream>
+        
+        int f1(int n) {
+          return abs(n);  // Good
+        }
+        
+        int f2(int n) {
+          return std::abs(n);  // Good
+        }
+        
+        __int128_t f3(__int128_t n) {
+          return abs(n);  // Bad
+        }
+        
+        // Wrong
+        // __int128_t f4(__int128_t n) {
+        //   return std::abs(n);
+        // }
+        
+        int main() {
+          std::cout << "f1: " << f1(-42) << std::endl;
+          std::cout << "f2: " << f2(-42) << std::endl;
+          // std::cout << "f3: " << f3(-42) << std::endl; // Wrong
+          // std::cout << "f4: " << f4(-42) << std::endl; // Wrong
+          return 0;
+        }
+        ```
+    
+    以上示例代码存在如下问题：
+    
+    1.  `__int128_t f3(__int128_t)` 中使用的是 C 风格的绝对值函数，其签名为 `int abs(int)`，故 `n` 首先会强制转换为 `int`，然后才会调用 `abs` 函数。
+    2.  `__int128_t f4(__int128_t)` 中使用的是 C++ 风格的绝对值函数，其并没有签名为 `__int128_t std::abs(__int128_t)` 的函数重载，所以无法通过编译。
+    3.  C++ 的流式输出不支持 `__int128_t` 与 `__uint128_t`。
+    
+    以下是一种解决方案：
+    
+    ??? note "修正后的代码"
+        ```cpp
+        #include <cmath>
+        #include <iostream>
+        
+        __int128_t abs(__int128_t n) { return n < 0 ? -n : n; }
+        
+        std::ostream &operator<<(std::ostream &os, __uint128_t n) {
+          if (n > 9) os << n / 10;
+          os << (int)(n % 10);
+          return os;
+        }
+        
+        std::ostream &operator<<(std::ostream &os, __int128_t n) {
+          if (n < 0) {
+            os << '-';
+            n = -n;
+          }
+          return os << (__uint128_t)n;
+        }
+        
+        int f1(int n) { return abs(n); }
+        
+        int f2(int n) { return std::abs(n); }
+        
+        __int128_t f3(__int128_t n) { return abs(n); }
+        
+        int main() {
+          std::cout << "f1: " << f1(-42) << std::endl;
+          std::cout << "f2: " << f2(-42) << std::endl;
+          std::cout << "f3: " << f3(-42) << std::endl;
+        }
+        ```
 
 ### 字符类型
 
@@ -230,7 +313,7 @@ C++ 中类型的转换机制较为复杂，这里主要介绍对于基础数据�
 
 数值提升过程中，值本身保持不变。
 
-???+ note
+???+ note "Note"
     C 风格的可变参数域在传值过程中会进行默认参数提升。如：
     
     ???+ note "示例代码"
@@ -328,6 +411,8 @@ C++ 中类型的转换机制较为复杂，这里主要介绍对于基础数据�
 
 #### 整数转换
 
+<!-- preprocess.skipdetails on -->
+
 -   如果目标类型为位宽为 $x$ 的无符号整数类型，则转换结果是原值 $\bmod 2^x$ 后的结果。
 
     -   若目标类型位宽大于源类型位宽：
@@ -355,6 +440,8 @@ C++ 中类型的转换机制较为复杂，这里主要介绍对于基础数据�
 
 -   如果源类型是 `bool`，则 `false` 转为对应类型的 0，`true` 转为对应类型的 1。
 
+<!-- preprocess.skipdetails off -->
+
 #### 浮点转换
 
 位宽较大的浮点数转换为位宽较小的浮点数，会将该数舍入到目标类型下最接近的值。
@@ -381,7 +468,7 @@ C++ 中类型的转换机制较为复杂，这里主要介绍对于基础数据�
 
 例如，下面这几条语句都是变量定义语句。
 
-```c++
+```cpp
 int oi;
 double wiki;
 char org = 'c';
@@ -401,7 +488,7 @@ char org = 'c';
 
 由一对大括号括起来的若干语句构成一个代码块。
 
-```c++
+```cpp
 int g = 20;  // 定义全局变量
 
 int main() {
@@ -421,7 +508,7 @@ int main() {
 
 常量的值在定义后不能被修改。定义时加一个 `const` 关键字即可。
 
-```c++
+```cpp
 const int a = 2;
 a = 3;
 ```

@@ -1,4 +1,4 @@
-author: StudyingFather, CCXXXI, Chrogeek, ChungZH, countercurrent-time, Early0v0, Enter-tainer, GavinZhengOI, Great-designer, H-J-Granger, henrytbtrue, HeRaNO, huayucaiji, iamtwz, Ir1d, ksyx, MegaOwIer, NachtgeistW, P-Y-Y, qwqAutomaton, shuzhouliu, shuzhouliu-bot, Siger Young, sshwy, SukkaW, Tiphereth-A, tsentau, WhenMelancholy, Xeonacid, Yukimaikoriya, Zhoier, zyj-111
+author: StudyingFather, CCXXXI, Chrogeek, ChungZH, countercurrent-time, Early0v0, Enter-tainer, GavinZhengOI, Great-designer, H-J-Granger, henrytbtrue, HeRaNO, huayucaiji, iamtwz, Ir1d, ksyx, MegaOwIer, NachtgeistW, P-Y-Y, qwqAutomaton, shuzhouliu, shuzhouliu-bot, Siger Young, sshwy, SukkaW, Tiphereth-A, tsentau, WhenMelancholy, Xeonacid, Yukimaikoriya, Zhoier, zyj-111, qute-firefly-26710-zjyjoe-lg-592080
 
 ## 引入
 
@@ -25,15 +25,21 @@ $$
 
 解：将方程组中两方程相加，消元 $y$ 可得：
 
-$5x = 200$
+$$
+5x = 200
+$$
 
 解得：
 
-$x = 40$
+$$
+x = 40
+$$
 
 将 $x = 40$ 代入方程组中第二个方程可得：
 
-$y = -60$
+$$
+y = -60
+$$
 
 ### 消元法理论的核心
 
@@ -57,7 +63,7 @@ $y = -60$
 
 -   在计算中将变量简化省略，方程的解不变。
 
-> 高斯在这些结论的基础上，提出了高斯消元法，首先将方程的增广矩阵利用行初等变换化为行最简形，然后以线性无关为准则对自由未知量赋值，最后列出表达方程组通解。
+高斯在这些结论的基础上，提出了高斯消元法，首先将方程的增广矩阵利用行初等变换化为行最简形，然后以线性无关为准则对自由未知量赋值，最后列出表达方程组通解。
 
 ## 高斯消元五步骤法
 
@@ -161,9 +167,8 @@ x_3+x_4 &= -4 \\
 \end{cases}
 $$
 
-解释
-
-> 所谓的还原线性方程组，即是在行最简形的基础上，将之重新书写为线性方程组的形式，即将行最简形中各位置的系数重新赋予变量，中间的竖线还原为等号。
+???+ note "解释"
+    所谓的还原线性方程组，即是在行最简形的基础上，将之重新书写为线性方程组的形式，即将行最简形中各位置的系数重新赋予变量，中间的竖线还原为等号。
 
 ### 求解第一个变量
 
@@ -174,9 +179,8 @@ x_3 = -x_4-4\notag
 \end{cases}
 $$
 
-解释
-
-> 即是对于所还原的线性方程组而言，将方程组中每个方程的第一个变量，用其他量表达出来。如方程组两方程中的第一个变量 $x_1$ 和 $x_3$
+???+ note "解释"
+    即是对于所还原的线性方程组而言，将方程组中每个方程的第一个变量，用其他量表达出来。如方程组两方程中的第一个变量 $x_1$ 和 $x_3$。
 
 ### 补充自由未知量
 
@@ -189,9 +193,8 @@ x_4 = x_4
 \end{cases}
 $$
 
-解释
-
-> 第 3 步中，求解出变量 $x_1$ 和 $x_3$，从而说明了方程剩余的变量 $x_2$ 和 $x_4$ 不受方程组的约束，是自由未知量，可以取任意值，所以需要在第 3 步骤解得基础上进行解得补充，补充的方法为 $x_2 = x_2,x_4 = x_4$，这种解得补充方式符合自由未知量定义，并易于理解，因为是自由未知量而不受约束，所以只能自己等于自己。
+???+ note "解释"
+    第 3 步中，求解出变量 $x_1$ 和 $x_3$，从而说明了方程剩余的变量 $x_2$ 和 $x_4$ 不受方程组的约束，是自由未知量，可以取任意值，所以需要在第 3 步骤解得基础上进行解得补充，补充的方法为 $x_2 = x_2,x_4 = x_4$，这种解得补充方式符合自由未知量定义，并易于理解，因为是自由未知量而不受约束，所以只能自己等于自己。
 
 ### 列表示方程组的通解
 
@@ -209,17 +212,14 @@ $$
 
 其中 $C_1$ 和 $C_2$ 为任意常数。
 
-解释
-
-> 即在第 4 步的基础上，将解表达为列向量组合的表示形式，同时由于 $x_2$ 和 $x_4$ 是自由未知量，可以取任意值，所以在解得右边，令二者分别为任意常数 $C_1$ 和 $C_2$，即实现了对方程组的求解。
-
-***
+???+ note "解释"
+    即在第 4 步的基础上，将解表达为列向量组合的表示形式，同时由于 $x_2$ 和 $x_4$ 是自由未知量，可以取任意值，所以在解得右边，令二者分别为任意常数 $C_1$ 和 $C_2$，即实现了对方程组的求解。
 
 ## 行列式计算
 
 ### 解释
 
-$N \times N$ 方阵行列式（Determinant）可以理解为所有列向量所夹的几何体的有向体积
+$N \times N$ 方阵行列式（Determinant）可以理解为所有列向量所夹的几何体的有向体积。
 
 例如：
 
@@ -253,18 +253,16 @@ $$
 
 -   矩阵行（列）所有元素同时乘以数 $k$，行列式等比例变大。
 
-> 由此，对矩阵应用高斯消元之后，我们可以得到一个对角线矩阵，此矩阵的行列式由对角线元素之积所决定。其符号可由交换行的数量来确定（如果为奇数，则行列式的符号应颠倒）。因此，我们可以在 $O(n^3)$ 的复杂度下使用高斯算法计算矩阵。
->
-> 注意，如果在某个时候，我们在当前列中找不到非零单元，则算法应停止并返回 0。
+由此，对矩阵应用高斯消元之后，我们可以得到一个对角线矩阵，此矩阵的行列式由对角线元素之积所决定。其符号可由交换行的数量来确定（如果为奇数，则行列式的符号应颠倒）。因此，我们可以在 $O(n^3)$ 的复杂度下使用高斯算法计算矩阵。
 
-***
+注意，如果在某个时候，我们在当前列中找不到非零单元，则算法应停止并返回 0。
 
 ### 实现
 
-```c++
-const double EPS = 1E-9;
+```cpp
+constexpr double EPS = 1E-9;
 int n;
-vector<vector<double> > a(n, vector<double>(n));
+vector<vector<double>> a(n, vector<double>(n));
 
 double det = 1;
 for (int i = 0; i < n; ++i) {
@@ -306,7 +304,7 @@ $$
 \begin{cases}
 a_{1,1}x_1 \oplus a_{1,2}x_2 \oplus \cdots \oplus a_{1,n}x_n &= b_1\\
 a_{2,1}x_1 \oplus a_{2,2}x_2 \oplus \cdots \oplus a_{2,n}x_n &= b_2\\
-\cdots &\cdots \\ a_{m,1}x_1 \oplus a_{m,2}x_2 \oplus \cdots \oplus a_{m,n}x_n &= b_1
+\cdots &\cdots \\ a_{m,1}x_1 \oplus a_{m,2}x_2 \oplus \cdots \oplus a_{m,n}x_n &= b_m
 \end{cases}
 $$
 
@@ -333,7 +331,7 @@ std::vector<bool> GaussElimination(
     for (int j = 1; j <= m; j++)
       if (i != j && matrix[j].test(i)) matrix[j] ^= matrix[i];
   }
-  std::vector<bool> ans(n + 1, 0);
+  std::vector<bool> ans(n + 1);
   for (int i = 1; i <= n; i++) ans[i] = matrix[i].test(0);
   return ans;
 }

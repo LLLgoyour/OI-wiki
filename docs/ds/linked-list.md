@@ -14,7 +14,7 @@
 
 ## 构建链表
 
-???+ tip
+???+ tip "Tip"
     构建链表时，使用指针的部分比较抽象，光靠文字描述和代码可能难以理解，建议配合作图来理解。
 
 ### 单向链表
@@ -25,7 +25,7 @@
 
 ???+ note "实现"
     === "C++"
-        ```c++
+        ```cpp
         struct Node {
           int value;
           Node *next;
@@ -35,7 +35,7 @@
     === "Python"
         ```python
         class Node:
-            def __init__(self, value = None, next = None): 
+            def __init__(self, value=None, next=None):
                 self.value = value
                 self.next = next
         ```
@@ -48,7 +48,7 @@
 
 ???+ note "实现"
     === "C++"
-        ```c++
+        ```cpp
         struct Node {
           int value;
           Node *left;
@@ -59,7 +59,7 @@
     === "Python"
         ```python
         class Node:
-            def __init__(self, value = None, left = None, right = None): 
+            def __init__(self, value=None, left=None, right=None):
                 self.value = value
                 self.left = left
                 self.right = right
@@ -85,7 +85,7 @@
 
 ???+ note "实现"
     === "C++"
-        ```c++
+        ```cpp
         void insertNode(int i, Node *p) {
           Node *node = new Node;
           node->value = i;
@@ -125,7 +125,7 @@
 
 ???+ note "实现"
     === "C++"
-        ```c++
+        ```cpp
         void insertNode(int i, Node *p) {
           Node *node = new Node;
           node->value = i;
@@ -172,7 +172,7 @@
 
 ???+ note "实现"
     === "C++"
-        ```c++
+        ```cpp
         void insertNode(int i, Node *p) {
           Node *node = new Node;
           node->value = i;
@@ -228,7 +228,7 @@
 
 ???+ note "实现"
     === "C++"
-        ```c++
+        ```cpp
         void deleteNode(Node *p) {
           p->value = p->next->value;
           Node *t = p->next;
@@ -258,7 +258,7 @@
 
 ???+ note "实现"
     === "C++"
-        ```c++
+        ```cpp
         void deleteNode(Node *&p) {
           p->left->right = p->right;
           p->right->left = p->left;

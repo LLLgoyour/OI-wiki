@@ -1,4 +1,4 @@
-author: ouuan, Henry-ZHR, StudyingFather, ChungZH, xyf007
+author: ouuan, Henry-ZHR, StudyingFather, ChungZH, xyf007, Cryflmind, oierlinch
 
 ## 出题前的准备
 
@@ -106,7 +106,7 @@ OI 中的数学题与其它数学题的区别，也是体现 OI 本质的一个�
 
 -   [LaTeX 入门](../tools/latex.md#图表)
 -   [LaTeX 数学公式大全](https://www.luogu.com.cn/blog/IowaBattleship/latex-gong-shi-tai-quan)
--   [LaTeX 各种命令，符号](https://blog.csdn.net/garfielder007/article/details/51646604)
+-   [LaTeX 各种命令，符号](https://blog.csdn.net/anxiaoxi45/article/details/39449445)
 
 使用时请注意 [LaTeX 公式的格式要求](../intro/format.md)。
 
@@ -419,13 +419,21 @@ gen 100000 100000 > 5.in
 
 ### 数据的格式
 
-这里引用 CodeChef 对题目输入数据的格式要求，可作为一般情况下的参考：
+这里提供一些通常情况下输入数据的格式要求，可作为一般情况下的参考：
 
-> 1.  不使用 Windows 格式的换行符，即 `\r\n`。
-> 2.  最后一行的末尾有换行符，即整个文件的最后一个字符需要是 `\n`。
-> 3.  没有空行。
-> 4.  任何一行的开头和末尾都没有空白字符。
-> 5.  连续的空格不超过 1 个。
+> 1.  使用测试环境下的换行格式。
+> 2.  文件最后一行的末尾有换行符，即整个文件的最后一个字符需要是 `\n`。
+> 3.  任何一行的开头和末尾都没有空白字符。
+> 4.  连续的空格不超过 1 个。
+
+在 Windows 环境下生成的数据，其换行格式通常为 `\r\n`，而主流测评系统均在 Linux 环境下运行，其换行格式为 `\n`。若在 Linux 环境下读入 Windows 格式的换行数据，可能会导致读入字符串时换行处理异常，进而导致不同环境下程序运行结果不同；若在 Linux 环境下比较 Linux 环境下生成的输出和 Windows 环境下生成的标准输出，可能由于换行格式不同而导致比较存在差异。为了保持程序行为一致，所有数据的换行格式必须转换为程序运行环境下的换行格式。
+
+一般可以通过如下方式生成 Linux 格式换行的数据：
+
+1.  直接使用 Linux 环境生成数据。
+2.  通过 [`dos2unix`](https://dos2unix.sourceforge.io/) 工具对输入输出文件进行转换，此工具包含于 Cygwin, MinGW 等工具链中。
+3.  使用二进制方式打开输出文件，并且使用 `\n` 换行格式。
+4.  参考 [此页面](https://help.luogu.com.cn/manual/luogu/problem/testcase-format#附录windows-环境下造数据注意事项) 中 `dos2unix.cpp` 代码自行编写工具。
 
 ## Special Judge
 
@@ -565,13 +573,9 @@ Codeforces 是全球最著名的算法竞赛网站之一，题目质量较高，
 
 ### 洛谷
 
-#### 个人公开赛
+参与出题工作人员需要有一定的奖项认证等级，创建比赛后由负责人在 [工单系统](https://www.luogu.com.cn/ticket) 中提交申请。
 
-在「我的题库」中出题并提交比赛申请。
-
-#### 团队公开赛
-
-在团队页面中出题并提交比赛申请。
+公开赛规范：<https://help.luogu.com.cn/rules/academic/opencontest-standard>
 
 ## 参考资料
 

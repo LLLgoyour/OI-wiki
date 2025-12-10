@@ -21,7 +21,7 @@ dfs 一棵树，然后如果 dfs 到 x 点，就 `push_back(x)`，dfs 完 x 点�
 
 ### 例题
 
-???+ note " 例题 [「WC2013」糖果公园](https://uoj.ac/problem/58)"
+???+ note "例题 [「WC2013」糖果公园](https://uoj.ac/problem/58)"
     题意：给你一棵树，树上第 $i$ 个点颜色为 $c_i$，每次询问一条路径 $u_i$,$v_i$, 求这条路径上的
     
     $\sum_{c}val_c\sum_{i=1}^{cnt_c}w_i$
@@ -48,25 +48,25 @@ dfs 一棵树，然后如果 dfs 到 x 点，就 `push_back(x)`，dfs 完 x 点�
 
 #### 实现
 
-??? 参考代码
+??? note "参考代码"
     ```cpp
     #include <algorithm>
     #include <cmath>
     #include <cstdio>
     using namespace std;
     
-    const int maxn = 200010;
+    constexpr int MAXN = 200010;
     
-    int f[maxn], g[maxn], id[maxn], head[maxn], cnt, last[maxn], dep[maxn],
-        fa[maxn][22], v[maxn], w[maxn];
+    int f[MAXN], g[MAXN], id[MAXN], head[MAXN], cnt, last[MAXN], dep[MAXN],
+        fa[MAXN][22], v[MAXN], w[MAXN];
     int block, index, n, m, q;
-    int pos[maxn], col[maxn], app[maxn];
-    bool vis[maxn];
-    long long ans[maxn], cur;
+    int pos[MAXN], col[MAXN], app[MAXN];
+    bool vis[MAXN];
+    long long ans[MAXN], cur;
     
     struct edge {
       int to, nxt;
-    } e[maxn];
+    } e[MAXN];
     
     int cnt1 = 0, cnt2 = 0;  // 时间戳
     
@@ -77,10 +77,10 @@ dfs 一棵树，然后如果 dfs 到 x 点，就 `push_back(x)`，dfs 完 x 点�
         return (pos[l] < pos[b.l]) || (pos[l] == pos[b.l] && pos[r] < pos[b.r]) ||
                (pos[l] == pos[b.l] && pos[r] == pos[b.r] && t < b.t);
       }
-    } a[maxn], b[maxn];
+    } a[MAXN], b[MAXN];
     
     void addedge(int x, int y) {
-      e[++cnt] = (edge){y, head[x]};
+      e[++cnt] = edge{y, head[x]};
       head[x] = cnt;
     }
     
@@ -98,11 +98,11 @@ dfs 一棵树，然后如果 dfs 到 x 点，就 `push_back(x)`，dfs 完 x 点�
     
     int lca(int x, int y) {
       if (dep[x] < dep[y]) swap(x, y);
-      if (dep[x] != dep[y]) {
+      if (dep[x] != dep[y]) {  // 爬到同一高度
         int dis = dep[x] - dep[y];
         for (int i = 20; i >= 0; i--)
           if (dis >= (1 << i)) dis -= 1 << i, x = fa[x][i];
-      }  // 爬到同一高度
+      }
       if (x == y) return x;
       for (int i = 20; i >= 0; i--) {
         if (fa[x][i] != fa[y][i]) x = fa[x][i], y = fa[y][i];
@@ -118,6 +118,7 @@ dfs 一棵树，然后如果 dfs 到 x 点，就 `push_back(x)`，dfs 完 x 点�
       vis[x] ^= 1;
     }
     
+    // 在时间维上移动
     void modify(int x, int t) {
       if (vis[x]) {
         add(x);
@@ -125,7 +126,7 @@ dfs 一棵树，然后如果 dfs 到 x 点，就 `push_back(x)`，dfs 完 x 点�
         add(x);
       } else
         col[x] = t;
-    }  // 在时间维上移动
+    }
     
     int main() {
       scanf("%d%d%d", &n, &m, &q);
@@ -158,7 +159,7 @@ dfs 一棵树，然后如果 dfs 到 x 点，就 `push_back(x)`，dfs 完 x 点�
           last[x] = b[cnt2].t = y;
         } else {
           if (f[x] > f[y]) swap(x, y);
-          a[++cnt1] = (query){lca(x, y) == x ? f[x] : g[x], f[y], cnt2, cnt1};
+          a[++cnt1] = query{lca(x, y) == x ? f[x] : g[x], f[y], cnt2, cnt1};
         }
       }
       sort(a + 1, a + cnt1 + 1);
@@ -227,7 +228,7 @@ dfs 一棵树，然后如果 dfs 到 x 点，就 `push_back(x)`，dfs 完 x 点�
 
 在这道题的基础上我们只要保证最后一个条件就可以解决分块的问题了。
 
-??? 思路
+??? note "思路"
     令 lim 为希望块的大小，首先，对于整个树 dfs，当子树的大小大于 lim 时，就将它们分在一块，容易想到：对于根，可能会剩下一些点，于是将这些点分在最后一个块里。
 
 做法：用栈维护当前节点作为父节点访问它的子节点，当从栈顶到父节点的距离大于希望块的大小时，弹出这部分元素分为一块，最后剩余的一块单独作为一块。
@@ -309,9 +310,12 @@ if (!sta.empty()) {
 
 由于多了时间维，块的大小取到 $n^{0.6}$ 的样子就差不多了。
 
-??? 参考代码
+??? note "参考代码"
     ```cpp
-    #include <bits/stdc++.h>
+    #include <algorithm>
+    #include <cmath>
+    #include <cstdio>
+    #include <stack>
     using namespace std;
     
     int gi() {
@@ -394,7 +398,7 @@ if (!sta.empty()) {
     long long w[100001];
     long long v[100001];
     long long now = 0;
-    bool vis[100001] = {0};
+    bool vis[100001] = {false};
     
     void back(int t) {
       if (vis[upd[t].x]) {

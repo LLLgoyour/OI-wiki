@@ -1,4 +1,4 @@
-author: HeRaNO, Zhoier, Ir1d, Xeonacid, wangdehu, ouuan, ranwen, ananbaobeichicun, Ycrpro, dbxxx-oi
+author: HeRaNO, Zhoier, Ir1d, Xeonacid, wangdehu, ouuan, ranwen, ananbaobeichicun, Ycrpro, dbxxx-oi, HowieHz
 
 ## 引入
 
@@ -102,7 +102,8 @@ $c$ 数组就是用来储存原始数组 $a$ 某段区间的和的，也就是�
 
 我们记 $x$ 二进制最低位 `1` 以及后面的 `0` 组成的数为 $\operatorname{lowbit}(x)$，那么 $c[x]$ 管辖的区间就是 $[x-\operatorname{lowbit}(x)+1, x]$。
 
-**这里注意：$\boldsymbol{\operatorname{lowbit}}$ 指的不是最低位 `1` 所在的位数 $\boldsymbol{k}$，而是这个 `1` 和后面所有 `0` 组成的 $\boldsymbol{2^k}$。**
+???+ warning "注意"
+    $\operatorname{lowbit}$ 指的不是最低位 `1` 所在的位数 $k$，而是这个 `1` 和后面所有 `0` 组成的 $2^k$。
 
 怎么计算 `lowbit`？根据位运算知识，可以得到 `lowbit(x) = x & -x`。
 
@@ -182,7 +183,7 @@ $c$ 数组就是用来储存原始数组 $a$ 某段区间的和的，也就是�
     
     === "Python"
         ```python
-        def getsum(x): # a[1]..a[x]的和
+        def getsum(x):  # a[1]..a[x]的和
             ans = 0
             while x > 0:
                 ans = ans + c[x]
@@ -213,7 +214,7 @@ $c$ 数组就是用来储存原始数组 $a$ 某段区间的和的，也就是�
     
     所以，如果 $c[x]$ 和 $c[y]$ 相交，那么 $c[x]$ 的管辖范围一定完全包含于 $c[y]$。
 
-**性质 $\boldsymbol{2}$：在 $\boldsymbol{c[x]}$ 真包含于 $\boldsymbol{c[x + \operatorname{lowbit}(x)]}$。**
+**性质 $\boldsymbol{2}$：$\boldsymbol{c[x]}$ 真包含于 $\boldsymbol{c[x + \operatorname{lowbit}(x)]}$。**
 
 ??? note "证明"
     证明：设 $y = x + \operatorname{lowbit}(x)$，$x = s \times 2^{k + 1} + 2^k$，则 $y = (s + 1) \times 2^{k +1}$，$l(x) = s \times 2^{k + 1} + 1$。
@@ -340,7 +341,7 @@ $c$ 数组就是用来储存原始数组 $a$ 某段区间的和的，也就是�
     === "Python"
         ```python
         def add(x, k):
-            while x <= n: # 不能越界
+            while x <= n:  # 不能越界
                 c[x] = c[x] + k
                 x = x + lowbit(x)
         ```
@@ -353,7 +354,7 @@ $c$ 数组就是用来储存原始数组 $a$ 某段区间的和的，也就是�
 
 比如给定序列 $a = (5, 1, 4)$ 要求建树，直接看作对 $a[1]$ 单点加 $5$，对 $a[2]$ 单点加 $1$，对 $a[3]$ 单点加 $4$ 即可。
 
-也有 $\Theta(n)$ 的建树方法，见本页面 [$\Theta(n)$ 建树](./#thetan-建树) 一节。
+也有 $\Theta(n)$ 的建树方法，见本页面 [$\Theta(n)$ 建树](#thetan-建树) 一节。
 
 ### 复杂度分析
 
@@ -366,7 +367,7 @@ $c$ 数组就是用来储存原始数组 $a$ 某段区间的和的，也就是�
 
 ## 区间加区间和
 
-前置知识：[前缀和 & 差分](../../basic/prefix-sum/)。
+前置知识：[前缀和 & 差分](../basic/prefix-sum.md)。
 
 该问题可以使用两个树状数组维护差分数组解决。
 
@@ -442,16 +443,22 @@ $\sum_{i=1}^r d_i$ 并不能推出 $\sum_{i=1}^r d_i \times i$ 的值，所以�
     
     === "Python"
         ```python
-        t1 = [0] * MAXN, t2 = [0] * MAXN; n = 0
+        t1 = [0] * MAXN
+        t2 = [0] * MAXN
+        n = 0
+        
         
         def lowbit(x):
             return x & (-x)
         
+        
         def add(k, v):
             v1 = k * v
             while k <= n:
-                t1[k] = t1[k] + v; t2[k] = t2[k] + v1
+                t1[k] = t1[k] + v
+                t2[k] = t2[k] + v1
                 k = k + lowbit(k)
+        
         
         def getsum(t, k):
             ret = 0
@@ -460,13 +467,18 @@ $\sum_{i=1}^r d_i$ 并不能推出 $\sum_{i=1}^r d_i \times i$ 的值，所以�
                 k = k - lowbit(k)
             return ret
         
+        
         def add1(l, r, v):
             add(l, v)
             add(r + 1, -v)
         
+        
         def getsum1(l, r):
-            return (r) * getsum(t1, r) - l * getsum(t1, l - 1) - \
-                  (getsum(t2, r) - getsum(t2, l - 1))
+            return (
+                (r) * getsum(t1, r)
+                - l * getsum(t1, l - 1)
+                - (getsum(t2, r) - getsum(t2, l - 1))
+            )
         ```
 
 根据这个原理，应该可以实现「区间乘区间积」，「区间异或一个数，求区间异或值」等，只要满足维护的信息和区间操作是同种运算即可，感兴趣的读者可以自己尝试。
@@ -554,7 +566,7 @@ $$
 
 ### 子矩阵加，求子矩阵和
 
-前置知识：[前缀和 & 差分](../../basic/prefix-sum/) 和本页面 [区间加区间和](./#区间加区间和) 一节。
+前置知识：[前缀和 & 差分](../basic/prefix-sum.md) 和本页面 [区间加区间和](#区间加区间和) 一节。
 
 和一维树状数组的「区间加区间和」问题类似，考虑维护差分数组。
 
@@ -623,7 +635,7 @@ $$
 
 ???+ note "实现"
     ```cpp
-    typedef long long ll;
+    using ll = long long;
     ll t1[N][N], t2[N][N], t3[N][N], t4[N][N];
     
     void add(ll x, ll y, ll z) {
@@ -671,7 +683,7 @@ $$
     
     很明显，$b$ 的大小和 $a$ 的值域有关。
     
-    若原数列值域过大，且重要的不是具体值而是值与值之间的相对大小关系，常 [离散化](../../misc/discrete/) 原数组后再建立权值数组。
+    若原数列值域过大，且重要的不是具体值而是值与值之间的相对大小关系，常 [离散化](../misc/discrete.md) 原数组后再建立权值数组。
     
     另外，权值数组是原数组无序性的一种表示：它重点描述数组的元素内容，忽略了数组的顺序，若两数组只是顺序不同，所含内容一致，则它们的权值数组相同。
     
@@ -704,7 +716,7 @@ $$
 
 原因很简单，考虑 $\operatorname{lowbit}(x + 2^i)$，它一定是 $2^i$，因为 $x$ 之前只累加过 $2^j$ 满足 $j > i$。因此 $c[x + 2^i]$ 表示的区间就是 $[x + 1 \ldots x + 2^i]$。
 
-如此以来，时间复杂度降低为 $\Theta(\log n)$。
+如此一来，时间复杂度降低为 $\Theta(\log n)$。
 
 ???+ note "实现"
     === "C++"
@@ -727,18 +739,22 @@ $$
         ```python
         # 权值树状数组查询第 k 小
         def kth(k):
-            sum = 0; x = 0
-            i = log2(n)
+            sum = 0
+            x = 0
+            i = int(log2(n))
             while ~i:
-                x = x + (1 << i) # 尝试扩展
-                if x >= n or sum + t[x] >= k: # 如果扩展失败
+                x = x + (1 << i)  # 尝试扩展
+                if x >= n or sum + t[x] >= k:  # 如果扩展失败
                     x = x - (1 << i)
                 else:
                     sum = sum + t[x]
+                i = i - 1
             return x + 1
         ```
 
 ### 全局逆序对（全局二维偏序）
+
+相关阅读和参考实现：[逆序对](../math/permutation.md#逆序数)
 
 全局逆序对也可以用权值树状数组巧妙解决。问题是这样的：给定长度为 $n$ 的序列 $a$，求 $a$ 中满足 $i < j$ 且 $a[i] > a[j]$ 的数对 $(i, j)$ 的数量。
 
@@ -783,6 +799,8 @@ $i$ 按照 $5 \to 1$ 扫：
 -   将 $b[x]$ 自增 $1$。
 
 原因：出现在 $b[x + 1 \ldots V]$ 中的元素一定比当前的 $x = a[j]$ 大，而 $j$ 的正序枚举，自然使得这些已在权值数组中的元素，在原数组上的索引 $i$ 小于当前遍历到的索引 $j$。
+
+此外，逆序对的计数还可以通过 [归并排序](../basic/merge-sort.md#逆序对) 解决。这一方法可以避免离散化。时间复杂度同样为 $O(n\log n)$。两种算法的参考实现都在 [逆序对](../math/permutation.md#逆序数) 章节。
 
 ## 树状数组维护不可差分信息
 
@@ -837,7 +855,7 @@ $i$ 按照 $5 \to 1$ 扫：
     -   设 $u = s \times 2^{k + 1} + 2^k$，则其儿子数量为 $k = \log_2\operatorname{lowbit}(u)$，编号分别为 $u - 2^t(0 \le t < k)$。
     -   $u$ 的所有儿子对应 $c$ 的管辖区间恰好拼接成 $[l(u), u - 1]$。
     
-    关于这两条性质的含义及证明，都可以在本页面的 [树状数组与其树形态的性质](./#树状数组与其树形态的性质) 一节找到。
+    关于这两条性质的含义及证明，都可以在本页面的 [树状数组与其树形态的性质](#树状数组与其树形态的性质) 一节找到。
 
 更新 $a[x]$ 后，我们只需要更新满足在树状数组树形态上，满足 $y$ 是 $x$ 的祖先的 $c[y]$。
 
@@ -869,7 +887,7 @@ $i$ 按照 $5 \to 1$ 扫：
 
 可以考虑拆成 $n$ 个单点修改，$\Theta(n\log^2n)$ 建树。
 
-也有 $\Theta(n)$ 的建树方法，见本页面 [$\Theta(n)$ 建树](./#thetan-建树) 一节的方法一。
+也有 $\Theta(n)$ 的建树方法，见本页面 [$\Theta(n)$ 建树](#thetan-建树) 一节的方法一。
 
 ## Tricks
 
@@ -925,7 +943,7 @@ $i$ 按照 $5 \to 1$ 扫：
         # Θ(n) 建树
         def init():
             for i in range(1, n + 1):
-                t[i] = sum[i] - sum[i-lowbit(i)]
+                t[i] = sum[i] - sum[i - lowbit(i)]
         ```
 
 ### 时间戳优化
@@ -961,9 +979,15 @@ $i$ 按照 $5 \to 1$ 扫：
     === "Python"
         ```python
         # 时间戳优化
-        tag = [0] * MAXN; t = [0] * MAXN; Tag = 0
+        tag = [0] * MAXN
+        t = [0] * MAXN
+        Tag = 0
+        
+        
         def reset():
             Tag = Tag + 1
+        
+        
         def add(k, v):
             while k <= n:
                 if tag[k] != Tag:
@@ -971,6 +995,8 @@ $i$ 按照 $5 \to 1$ 扫：
                 t[k] = t[k] + v
                 tag[k] = Tag
                 k = k + lowbit(k)
+        
+        
         def getsum(k):
             ret = 0
             while k:

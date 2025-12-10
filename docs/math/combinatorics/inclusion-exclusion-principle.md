@@ -58,7 +58,7 @@ $$
 
 右边使用容斥即可。
 
-可能接触过容斥的读者都清楚上述内容，而更关心的是容斥的应用
+可能接触过容斥的读者都清楚上述内容，而更关心的是容斥的应用。
 
 那么接下来我们给出 3 个层次不同的例题来为大家展示容斥原理的应用。
 
@@ -69,7 +69,7 @@ $$
 
 ### 没有限制时
 
-如果没有 $x_i<b_i$ 的限制，那么不定方程 $\sum_{i=1}^nx_i=m$ 的非负整数解的数目为 $\dbinom{m+n-1}{n-1}$.
+如果没有 $x_i\leq b_i$ 的限制，那么不定方程 $\sum_{i=1}^nx_i=m$ 的非负整数解的数目为 $\dbinom{m+n-1}{n-1}$.
 
 略证：插板法。
 
@@ -183,7 +183,7 @@ $$
 Ans=\left|\bigcup_{i=1}^TQ_i\right|
 $$
 
-再考虑等式右边的含义，只要满足 $1\sim T$ 任一条件即可，也就是存在两个点同色（不一定相邻）的染色方案数！而我们知道染色方案的全集是 $U$，显然 $|U|=m^n$. 而转化为补集，就是求两两异色的染色方案数，即 $A_m^n=\frac{m!}{n!}$. 因此
+再考虑等式右边的含义，只要满足 $1\sim T$ 任一条件即可，也就是存在两个点同色（不一定相邻）的染色方案数！而我们知道染色方案的全集是 $U$，显然 $|U|=m^n$. 而转化为补集，就是求两两异色的染色方案数，即 $A_m^n=\frac{m!}{(m-n)!}$. 因此
 
 $$
 Ans=m^n-A_m^n
@@ -199,7 +199,7 @@ $$
 
 考虑下面的问题：
 
-???+ note " 求最大公约数为 $k$ 的数对个数 "
+???+ note "求最大公约数为 $k$ 的数对个数"
     设 $1 \le x, y \le N$，$f(k)$ 表示最大公约数为 $k$ 的有序数对 $(x, y)$ 的个数，求 $f(1)$ 到 $f(N)$ 的值。
 
 这道题固然可以用欧拉函数或莫比乌斯反演的方法来做，但是都不如用容斥原理来的简单。
@@ -260,7 +260,7 @@ $$
 
 $$
 \begin{aligned}
-\varphi(n)&=n-\sum_{i}\frac{n}{p_i}+\sum_{i<j}\frac{n}{p_ip_j}-\cdots+(-1)^k\frac{n}{p_1p_2\cdots p_n}\\
+\varphi(n)&=n-\sum_{i}\frac{n}{p_i}+\sum_{i<j}\frac{n}{p_ip_j}-\cdots+(-1)^k\frac{n}{p_1p_2 \cdots p_k}\\
 &=n\left(1-\frac{1}{p_1}\right)\left(1-\frac{1}{p_2}\right)\cdots\left(1-\frac{1}{p_k}\right)\\
 &=n\prod_{i=1}^k\left(1-\frac{1}{p_i}\right)
 \end{aligned}
@@ -367,7 +367,7 @@ $$
 
 ## Min-max 容斥
 
-对于满足全序关系并且其中元素满足可加减性的序列 $\{x_i\}$，设其长度为 $n$，并设 $S=\{1,2,3,\cdots,n\}$，则有：
+对于满足 [全序](../order-theory.md#偏序集) 关系并且其中元素满足可加减性的序列 $\{x_i\}$，设其长度为 $n$，并设 $S=\{1,2,3,\cdots,n\}$，则有：
 
 $$
 \max_{i\in S}{x_i}=\sum_{T\subseteq S}{(-1)^{|T|-1}\min_{j\in T}{x_j}}
@@ -377,14 +377,7 @@ $$
 \min_{i\in S}{x_i}=\sum_{T\subseteq S}{(-1)^{|T|-1}\max_{j\in T}{x_j}}
 $$
 
-??? note "全序关系"
-    对于集合 $X$，若 $X$ 满足全序关系，则下列陈述对于任意 $a,b,c\in X$ 都成立：
-    
-    -   反对称性：若 $a\le b$ 且 $b\le a$，则 $a=b$;
-    -   传递性：若 $a\le b$ 且 $b\le c$，则 $a\le c$；
-    -   完全性：$a\le b$ 或者 $b\le a$。
-
-**证明：** 考虑做一个到一般容斥原理的映射。对于 $x\in S$，假设 $x$ 是第 $k$ 大的元素。那么我们定义一个映射 $f:x\mapsto \{1,2,\cdots,k\}$。显然这是一个双射。
+**证明：** 考虑做一个到一般容斥原理的映射。对于 $x\in S$，假设 $x$ 是第 $k$ 小的元素。那么我们定义一个映射 $f:x\mapsto \{1,2,\cdots,k\}$。显然这是一个双射。
 
 那么容易发现，对于 $x,y\in S$，$f(\min(x,y))=f(x)\cap f(y)$，$f(\max(x,y))=f(x)\cup f(y)$。因此我们得到：
 
@@ -399,7 +392,7 @@ $$
 
 然后再把 $\left|f\left(\max_{i\in S}{x_i}\right)\right|$ 映射回 $\max_{i\in S}{x_i}$，而 $\min$ 是类似的。
 
-**证毕**
+证毕。
 
 但是你可能觉得这个式子非常蠢，最大值明明可以直接求。之所以 min-max 容斥这么重要，是因为它在期望上也是成立的，即：
 
@@ -437,7 +430,7 @@ $$
 
 $\min$ 是类似的。
 
-**证毕**
+证毕。
 
 还有更强的：
 
@@ -501,7 +494,7 @@ $$
 
 剩下三个是类似的。
 
-**证毕**
+证毕。
 
 根据 min-max 容斥，我们还可以得到下面的式子：
 
@@ -576,10 +569,15 @@ $$
 
 不妨设 $F'(T)=(-1)^{|T|-1}F(T)$，那么进一步得到 $E(\max_{i\in S}x_i)=\sum_{T\subseteq S}F'(T)$。因此可以使用 FMT（也叫子集前缀和，或者 FWT 或变换）在 $O(2^nn)$ 的时间内对每个 $S$ 计算出 $E(\max_{i\in S}x_i)$，这样就可以 $O(1)$ 回答询问了。
 
+### 习题
+
+-   [ABC331- G - Collect Them All](https://atcoder.jp/contests/abc331/tasks/abc331_g)
+-   [洛谷 P4707 重返现世](https://www.luogu.com.cn/problem/P4707)
+
 ## 参考文献
 
-王迪《容斥原理》，2013 年信息学奥林匹克中国国家队候选队员论文集
+[浅探容斥原理 - 王迪](https://github.com/OI-wiki/libs/blob/master/%E9%9B%86%E8%AE%AD%E9%98%9F%E5%8E%86%E5%B9%B4%E8%AE%BA%E6%96%87/%E5%9B%BD%E5%AE%B6%E9%9B%86%E8%AE%AD%E9%98%9F2013%E8%AE%BA%E6%96%87%E9%9B%86.pdf)，2013 年信息学奥林匹克中国国家队候选队员论文集
 
-[Cyhlnj《有标号的 DAG 计数系列问题》](https://blog.csdn.net/oi_konnyaku/article/details/84862271)
+[有标号的 DAG 计数系列问题 - Cyhlnj](https://www.cnblogs.com/cjoieryl/p/10078167.html)
 
-[Wikipedia - 全序关系](https://en.wikipedia.org/wiki/Total_order)
+[全序关系 - Wikipedia](https://en.wikipedia.org/wiki/Total_order)

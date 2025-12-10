@@ -24,14 +24,14 @@
 
 通过 **最大流最小割定理**，我们可以直接得到如下代码：
 
-??? "参考代码"
+??? note "参考代码"
     ```cpp
     #include <algorithm>
     #include <cstdio>
     #include <cstring>
     #include <queue>
     
-    const int N = 1e4 + 5, M = 2e5 + 5;
+    constexpr int N = 1e4 + 5, M = 2e5 + 5;
     int n, m, s, t, tot = 1, lnk[N], ter[M], nxt[M], val[M], dep[N], cur[N];
     
     void add(int u, int v, int w) {

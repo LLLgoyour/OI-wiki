@@ -1,4 +1,6 @@
-左偏红黑树是红黑树的一种变体，它的对红边（点）的位置做了一定限制，使得其插入与删除操作可以与 2-3 树构成一一对应。
+author: c-forrest, Enter-tainer, giiiiiithub, hly1204, iamtwz, Ir1d, kigawas, ksyx, luxuryspark567, mgt, orzAtalod, sandyzikun, SunsetGlow95, Tiphereth-A, current2020, untitledunrevised, yuhuoji
+
+左偏红黑树是 [红黑树](./rbtree.md) 的一种变体，它的对红边（点）的位置做了一定限制，使得其插入与删除操作可以与 [2-3 树](https://en.wikipedia.org/wiki/2%E2%80%933_tree) 构成一一对应。
 
 我们假设读者已经至少掌握了一种基于旋转的平衡树，因此本文不会对旋转操作进行讲解。
 
@@ -15,7 +17,7 @@
 
 这保证了从根节点到任意叶子的最长路径（红黑交替）不会超过最短路径（全黑）的二倍。从而保证了树的平衡性。
 
-维护这些性质是比较复杂的，如果我们要插入一个节点，首先，它一定会被染色成红色，否则会破坏性质 3。即使这样，我们还是有可能会破坏性质 2。因此需要进行调整。而删除节点就更加麻烦，与插入类似，我们不能删除黑色节点，否则会破坏黑高的平衡。如何方便地解决这些问题呢？
+维护这些性质是比较复杂的，如果我们要插入一个节点，首先，它一定会被染色成红色，否则会破坏性质 4。即使这样，我们还是有可能会破坏性质 3。因此需要进行调整。而删除节点就更加麻烦，与插入类似，我们不能删除黑色节点，否则会破坏黑高的平衡。如何方便地解决这些问题呢？
 
 ## 左偏红黑树（Left Leaning Red Black Tree）
 
@@ -108,9 +110,11 @@
 
 下面我们来考虑怎么满足这个性质，注意，我们会在向下递归的时候 **临时地** 破坏左偏红黑树的若干性质，但是当我们从递归中返回时还会将其恢复。
 
+如下图所描述的，是一种较为简单的情况，此时 `h->rc->lc` 为黑色，我们只需要一次翻转颜色即可：
+
 ![llrbt-7](./images/llrbt-7.png)
 
-下图描述一种简单的情况，我们只需要一次翻转颜色即可。
+并且，在如上所示的翻转之后，不会使 `h->rc` 与 `h->rc->lc` 形成连续的红边；
 
 但如果 `h->rc->lc` 是红色，情况会比较复杂：
 
@@ -292,14 +296,14 @@
       Node *root_{nullptr};
     
      public:
-      typedef Key KeyType;
-      typedef Key ValueType;
-      typedef std::size_t SizeType;
-      typedef std::ptrdiff_t DifferenceType;
-      typedef Compare KeyCompare;
-      typedef Compare ValueCompare;
-      typedef Key &Reference;
-      typedef const Key &ConstReference;
+      using KeyType = Key;
+      using ValueType = Key;
+      using SizeType = std::size_t;
+      using DifferenceType = std::ptrdiff_t;
+      using KeyCompare = Compare;
+      using ValueCompare = Compare;
+      using Reference = Key &;
+      using ConstReference = const Key &;
     
       Set() = default;
     
@@ -444,8 +448,7 @@
     const Key &Set<Key, Compare>::get_min(Set::Node *root) const {
       Node *x = root;
       // will crash as intended when root == nullptr
-      for (; x->lc != nullptr; x = x->lc)
-        ;
+      for (; x->lc != nullptr; x = x->lc);
       return x->key;
     }
     
@@ -514,7 +517,25 @@
     }
     ```
 
+## 与 2-3 树的关系
+
+2-3 树是 3 阶 B 树，每个结点都是 2 结点或 3 结点，存储一个或两个数据元素。非叶结点的 2 结点和 3 结点分别只能有两个或三个孩子。而且，2-3 树中存储的所有数据都是有序的。
+
+2-3 树和左偏红黑树实质是等价的。2-3 树中一个节点可以存储 1 个元素或 2 个元素，而红黑树的一个节点只能存储一个元素。如下图所示，2-3 树的 2 节点对应一个黑色节点，3 节点对应一个红色节点和一个黑色节点（可以将 bc 视作平行）。
+
+![2-3-tree-rbt](images/2-3-tree-rbt-1.svg)
+
+![2-3-tree-rbt](images/2-3-tree-rbt-2.svg)
+
+下图是一棵 2-3 树对应的左偏红黑树。
+
+![2-3-tree-rbt](images/2-3-tree-rbt-3.svg)
+
+2-3 树和左偏红黑树的插入与删除操作是一一对应的。[^23-vs-llrbt]
+
 ## 参考资料与拓展阅读
 
 -   [Left-Leaning Red-Black Trees](https://sedgewick.io/wp-content/themes/sedgewick/papers/2008LLRB.pdf)-  Robert Sedgewick Princeton University
 -   [Balanced Search Trees](https://algs4.cs.princeton.edu/lectures/keynote/33BalancedSearchTrees-2x2.pdf)-\_Algorithms\_Robert Sedgewick | Kevin Wayne
+
+[^23-vs-llrbt]: [这篇博文](https://riteme.site/blog/2016-3-12/2-3-tree-and-red-black-tree.html) 提供了详细的描述。文中的「红黑树」实际上指的是「左偏红黑树」。

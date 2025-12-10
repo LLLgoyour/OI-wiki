@@ -1,4 +1,4 @@
-author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-time, Early0v0, Enter-tainer, fearlessxjdx, Great-designer, H-J-Granger, hsfzLZH1, iamtwz, Ir1d, ksyx, Marcythm, NachtgeistW, ouuan, Persdre, shuzhouliu, StudyingFather, SukkaW, Tiphereth-A, wsyhb, Yesphet, yuhuoji
+author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-time, Early0v0, Enter-tainer, fearlessxjdx, Great-designer, H-J-Granger, hsfzLZH1, iamtwz, Ir1d, ksyx, Marcythm, NachtgeistW, ouuan, Persdre, shuzhouliu, StudyingFather, SukkaW, Tiphereth-A, wsyhb, Yesphet, yuhuoji, lingkerio, bililateral, q-wind
 
 ## 定义
 
@@ -19,7 +19,7 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
 ### 二叉搜索树节点的定义
 
 ???+ note "实现"
-    ```c++
+    ```cpp
     struct TreeNode {
       int key;
       TreeNode* left;
@@ -27,6 +27,9 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
       // 维护其他信息，如高度，节点数量等
       int size;   // 当前节点为根的子树大小
       int count;  // 当前节点的重复数量
+    
+      TreeNode(int value)
+          : key(value), size(1), count(1), left(nullptr), right(nullptr) {}
     };
     ```
 
@@ -37,7 +40,7 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
 遍历一棵二叉搜索树的代码如下：
 
 ???+ note "实现"
-    ```c++
+    ```cpp
     void inorderTraversal(TreeNode* root) {
       if (root == nullptr) {
         return;
@@ -89,7 +92,7 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
 时间复杂度为 $O(h)$。
 
 ???+ note "实现"
-    ```c++
+    ```cpp
     bool search(TreeNode* root, int target) {
       if (root == nullptr) {
         return false;
@@ -135,6 +138,8 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
       } else {
         root->count++;  // 节点值相等，增加重复数量
       }
+      root->size = root->count + (root->left ? root->left->size : 0) +
+                   (root->right ? root->right->size : 0);  // 更新节点的子树大小
       return root;
     }
     ```
@@ -153,14 +158,14 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
 
     -   若 `root` 为链节点，即只有一个儿子的节点，返回这个儿子。
 
-    -   若 `count` 有两个非空子节点，一般是用它左子树的最大值（左子树最右的节点）或右子树的最小值（右子树最左的节点）代替它，然后将它删除。
+    -   若 `root` 有两个非空子节点，一般是用它左子树的最大值（左子树最右的节点）或右子树的最小值（右子树最左的节点）代替它，然后将它删除。
 
 时间复杂度 $O(h)$。
 
 ???+ note "实现"
     方法使用 `root = remove(root, 1)` 表示删除根节点为 `root` 树中值为 1 的节点，并返回新的根节点。
     
-    ```c++
+    ```cpp
     // 此处返回值为删除 value 后的新 root
     TreeNode* remove(TreeNode* root, int value) {
       if (root == nullptr) {
@@ -186,24 +191,27 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
             TreeNode* successor = findMinNode(root->right);
             root->key = successor->key;
             root->count = successor->count;  // 更新重复数量
+            // 当 successor->count > 1时，也应该删除该节点，否则
+            // 后续的删除只会减少重复数量
+            successor->count = 1;
             root->right = remove(root->right, successor->key);
           }
         }
       }
+      // 继续维护size，不写成 --root->size;
+      // 是因为value可能不在树中，从而可能未发生删除
+      root->size = root->count + (root->left ? root->left->size : 0) +
+                   (root->right ? root->right->size : 0);
       return root;
     }
     
-    ```
-    
-    //此处以右子树的最小值为例
-    TreeNode\* findMinNode(TreeNode\* root) {
-    while (root->left != nullptr) {
-    root = root->left;
+    // 此处以右子树的最小值为例
+    TreeNode* findMinNode(TreeNode* root) {
+      while (root->left != nullptr) {
+        root = root->left;
+      }
+      return root;
     }
-    return root;
-    }
-    
-    ```
     ```
 
 ### 求元素的排名
@@ -220,8 +228,8 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
       if (root == nullptr) return 0;
       if (root->key == v) return (root->left ? root->left->size : 0) + 1;
       if (root->key > v) return queryRank(root->left, v);
-      return queryRank(root->right, v) +
-             (root->left ? root->left->size + root->count : 0);
+      return queryRank(root->right, v) + (root->left ? root->left->size : 0) +
+             root->count;
     }
     ```
 
@@ -245,10 +253,10 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
         if (root->left->size >= k) return querykth(root->left, k);
         if (root->left->size + root->count >= k) return root->key;
       } else {
-        if (k == 1) return root->key;
+        if (k <= root->count) return root->key;
       }
       return querykth(root->right,
-                      k - (root->left ? root->left->size + root->count : 0));
+                      k - (root->left ? root->left->size : 0) - root->count);
     }
     ```
 
@@ -258,7 +266,7 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
 
 关于查找效率，如果一棵树的高度为 $h$，在最坏的情况，查找一个关键字需要对比 $h$ 次，查找时间复杂度（也为平均查找长度 ASL，Average Search Length）不超过 $O(h)$。一棵理想的二叉搜索树所有操作的时间可以缩短到 $O(\log n)$（n 是节点总数）。
 
-然而 $O(h)$ 的时间复杂度仅为理想情况。在最坏情况下，搜索树有可能退化为链表。想象一棵每个结点只有右孩子的二叉搜索树，那么它的性质就和链表一样，所有操作（增删改查）的时间是 $O(n)$。
+然而 $O(\log n)$ 的时间复杂度仅为理想情况。在最坏情况下，搜索树有可能退化为链表。想象一棵每个结点只有右孩子的二叉搜索树，那么它的性质就和链表一样，所有操作（增删改查）的时间是 $O(n)$。
 
 可以发现操作的复杂度与树的高度 $h$ 有关。由此引出了平衡树，通过一定操作维持树的高度（平衡性）来降低操作的复杂度。
 
@@ -273,8 +281,6 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
 -   [AVL 树](avl.md) 每个节点 N 维护以 N 为根节点的树的高度信息。AVL 树对平衡性的定义：如果 T 是一棵 AVL 树，当且仅当左右子树也是 AVL 树，且 $|height(T->left) - height(T->right)| \leq 1$。
 
 -   [Size Balanced Tree](sbt.md) 每个节点 N 维护以 N 为根节点的树中节点个数 `size`。对平衡性的定义：任意节点的 `size` 不小于其兄弟节点（Sibling）的所有子节点（Nephew）的 `size`。
-
--   [B 树](b-tree.md) 对平衡性的定义：每个节点应该保持在一个预定义的范围内的关键字数量。
 
 此外，对于拥有同样元素值集合的搜索树，平衡状态可能是不唯一的。也就是说，可能两棵不同的搜索树，含有的元素值集合相同，并且都是平衡的。
 
@@ -297,7 +303,7 @@ author: 2323122, aofall, AtomAlpaca, Bocity, CoelacanthusHex, countercurrent-tim
 下面给出左旋和右旋的代码。
 
 ???+ note "实现"
-    ```c++
+    ```cpp
     TreeNode* rotateLeft(TreeNode* root) {
       TreeNode* newRoot = root->right;
       root->right = newRoot->left;

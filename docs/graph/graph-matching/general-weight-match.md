@@ -162,9 +162,9 @@ vertex labeling 为 $0$ 的点最后将成为未匹配点。
 这里为了方便实现，使用边权乘 $2$ 来计算 $z_e$ 的值，这样就不会出现浮点数误差了。
 
 ???+ note "存储"
-    ```c++
-    #define INF INT_MAX
-    #define MAXN 400
+    ```cpp
+    constexpr int INF = INT_MAX;
+    constexpr int MAXN = 400;
     
     struct edge {
       int u, v, w;
@@ -203,7 +203,7 @@ flower[b2] = {9, b1, 4, 3, 2, 11, 10}
 flower[b1] = {5, 8, 6}
 ```
 
-```c++
+```cpp
 int lab[MAXN * 2 + 1];
 // lab[u]用来记录z_u, lab[b]用来记录z_B
 int match[MAXN * 2 + 1], slack[MAXN * 2 + 1], st[MAXN * 2 + 1],
@@ -233,21 +233,21 @@ flower_from[b1][6] = 6
 以此类推
 ```
 
-```c++
-inline int e_delta(const edge &e) {
+```cpp
+int e_delta(const edge &e) {
   // 计算ze，为了方便起见先把所有边的权重乘二
   // 在花里面直接计算 e_delta 值会导致错误
   return lab[e.u] + lab[e.v] - g[e.u][e.v].w * 2;
 }
 
-inline void update_slack(int u, int x) {
+void update_slack(int u, int x) {
   // 以u更新slack[x]的值
   if (!slack[x] || e_delta(g[u][x]) < e_delta(g[slack[x]][x])) {
     slack[x] = u;
   }
 }
 
-inline void set_slack(int x) {
+void set_slack(int x) {
   // 算出slack[x]的值，slack[x]=0表示x是交错树中的节点
   slack[x] = 0;
   for (int u = 1; u <= n; ++u) {
@@ -258,7 +258,7 @@ inline void set_slack(int x) {
 }
 ```
 
-```c++
+```cpp
 void q_push(int x) {
   // 把x丟到queue里面，我们设定queue不能直接push一朵花
   if (x <= n)
@@ -271,7 +271,7 @@ void q_push(int x) {
   }
 }
 
-inline void set_st(int x, int b) {
+void set_st(int x, int b) {
   // 将x所在的花设为b
   st[x] = b;
   if (x > n) {
@@ -283,8 +283,8 @@ inline void set_st(int x, int b) {
 }
 ```
 
-```c++
-inline int get_pr(int b, int xr) {
+```cpp
+int get_pr(int b, int xr) {
   // xr是flower[b]中的一个点，返回值pr是它的位置
   // 为了方便程序运行，我们让 flower[b][0]~flower[b][pr]为花里的交替路
   int pr = find(flower[b].begin(), flower[b].end(), xr) - flower[b].begin();
@@ -305,8 +305,8 @@ inline int get_pr(int b, int xr) {
 
 如果使用 `get_pr(b2,2)`，`flower[b2]` 会变成 `{9,b1,4,3,2,11,10}`，并返回 4。
 
-```c++
-inline void set_match(int u, int v) {
+```cpp
+void set_match(int u, int v) {
   // 设置u和v为匹配边，u和v有可能是花
   match[u] = g[u][v].v;
   if (u > n) {
@@ -324,7 +324,7 @@ inline void set_match(int u, int v) {
   }
 }
 
-inline void augment(int u, int v) {
+void augment(int u, int v) {
   // 把u和u的祖先全部增广，并设(u,v)为匹配边
   for (;;) {
     int xnv = st[match[u]];
@@ -336,7 +336,7 @@ inline void augment(int u, int v) {
   }
 }
 
-inline int get_lca(int u, int v) {
+int get_lca(int u, int v) {
   // 找出u,v在交错树上的lca
   static int t = 0;
   for (++t; u || v; swap(u, v)) {
@@ -351,8 +351,8 @@ inline int get_lca(int u, int v) {
 ```
 
 ???+ note "增加一朵奇花"
-    ```c++
-    inline void add_blossom(int u, int lca, int v) {
+    ```cpp
+    void add_blossom(int u, int lca, int v) {
       // 将u,v,lca这朵花缩成一个点 b
       // 交错树上u,v的lca即为花托
       int b = n + 1;
@@ -409,8 +409,8 @@ inline int get_lca(int u, int v) {
     ```
 
 ???+ note "拆花"
-    ```c++
-    inline void expand_blossom(int b) {
+    ```cpp
+    void expand_blossom(int b) {
       // b是奇花且zB=0时，必须要把b拆开
       // 因为只拆开b而已，所以如果b里面有包含其他的花
       // 不需要把他们拆开
@@ -446,8 +446,8 @@ inline int get_lca(int u, int v) {
     ```
 
 ???+ note "尝试增广一条等边"
-    ```c++
-    inline bool on_found_edge(const edge &e) {
+    ```cpp
+    bool on_found_edge(const edge &e) {
       // BFS时找到一条等边e
       // 要对它进行以下的处理
       // 这里u一定是偶点
@@ -477,8 +477,8 @@ inline int get_lca(int u, int v) {
     ```
 
 ???+ note "增广"
-    ```c++
-    inline bool matching() {
+    ```cpp
+    bool matching() {
       memset(S + 1, -1, sizeof(int) * n_x);
       memset(slack + 1, 0, sizeof(int) * n_x);
       q = queue<int>();  // 把queue清空
@@ -525,7 +525,7 @@ inline int get_lca(int u, int v) {
           }
         for (int u = 1; u <= n; ++u) {
           if (S[st[u]] == 0) {
-            if (lab[u] == d) return 0;
+            if (lab[u] == d) return false;
             // 如果lab[u]=0就直接结束程序
             lab[u] -= d;
           } else if (S[st[u]] == 1)
@@ -556,8 +556,8 @@ inline int get_lca(int u, int v) {
     ```
 
 ???+ note "主函数"
-    ```c++
-    inline pair<long long, int> weight_blossom() {
+    ```cpp
+    pair<long long, int> weight_blossom() {
       // 主函数，一开始先初始化
       memset(match + 1, 0, sizeof(int) * n);
       n_x = n;  // 一开始没有花
@@ -589,8 +589,8 @@ inline int get_lca(int u, int v) {
 ???+ note "初始化"
     很重要 使用前一定要初始化
     
-    ```c++
-    inline void init_weight_graph() {
+    ```cpp
+    void init_weight_graph() {
       // 在把边输入到图里面前必须要初始化
       // 因为是最大权匹配所以把不存在的边设为0
       for (int u = 1; u <= n; ++u)

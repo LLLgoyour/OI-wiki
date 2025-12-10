@@ -31,7 +31,7 @@ trie 的结构非常好懂，我们用 $\delta(u,c)$ 表示结点 $u$ 的 $c$ �
           if (!nex[p][c]) nex[p][c] = ++cnt;  // 如果没有，就添加结点
           p = nex[p][c];
         }
-        exist[p] = 1;
+        exist[p] = true;
       }
     
       bool find(char *s, int l) {  // 查找字符串
@@ -57,7 +57,7 @@ trie 的结构非常好懂，我们用 $\delta(u,c)$ 表示结点 $u$ 的 $c$ �
         def insert(self, s):  # 插入字符串
             p = 0
             for i in s:
-                c = ord(i) - ord('a')
+                c = ord(i) - ord("a")
                 if not self.nex[p][c]:
                     self.cnt += 1
                     self.nex[p][c] = self.cnt  # 如果没有，就添加结点
@@ -67,11 +67,46 @@ trie 的结构非常好懂，我们用 $\delta(u,c)$ 表示结点 $u$ 的 $c$ �
         def find(self, s):  # 查找字符串
             p = 0
             for i in s:
-                c = ord(i) - ord('a')
+                c = ord(i) - ord("a")
                 if not self.nex[p][c]:
                     return False
                 p = self.nex[p][c]
             return self.exist[p]
+    ```
+
+=== "Java"
+    ```java
+    public class Trie {
+        int[][] tree = new int[10000][26];
+        int cnt = 0;
+        boolean[] end = new boolean[10000];
+        
+        public void insert(String word) {
+            int p = 0;
+            char[] chars = word.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                int c = chars[i] - 'a';
+                if (tree[p][c] == 0) {
+                    tree[p][c] = ++cnt;
+                }
+                p = tree[p][c];
+            }
+            end[p] = true;
+        }
+        
+        public boolean find(String word) {
+            int p = 0;
+            char[] chars = word.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                int c = chars[i] - 'a';
+                if (tree[p][c] == 0) {
+                    return false;
+                }
+                p = tree[p][c];
+            }
+            return end[p];
+        }
+    }
     ```
 
 ## 应用
@@ -101,8 +136,8 @@ trie 是 [AC 自动机](./ac-automaton.md) 的一部分。
 
 将数的二进制表示看做一个字符串，就可以建出字符集为 $\{0,1\}$ 的 trie 树。
 
-???+ note "[BZOJ1954 最长异或路径](https://www.luogu.com.cn/problem/P4551)"
-    给你一棵带边权的树，求 $(u, v)$ 使得 $u$ 到 $v$ 的路径上的边权异或和最大，输出这个最大值。
+???+ note "[BZOJ1954 最长异或路径](https://hydro.ac/p/bzoj-P1954)"
+    给你一棵带边权的树，求 $(u, v)$ 使得 $u$ 到 $v$ 的路径上的边权异或和最大，输出这个最大值。这里的异或和指的是所有边权的异或。
     
     点数不超过 $10^5$，边权在 $[0,2^{31})$ 内。
     
@@ -167,7 +202,7 @@ void maintain(int o) {
 ???+ note "实现"
     ```cpp
     namespace trie {
-    const int MAXH = 21;
+    constexpr int MAXH = 21;
     int ch[_ * (MAXH + 1)][2], w[_ * (MAXH + 1)], xorv[_ * (MAXH + 1)];
     int tot = 0;
     
@@ -288,7 +323,9 @@ int merge(int a, int b) {
     需要支持以下操作。
     
     -   将树上与一个节点 $x$ 距离为 $1$ 的节点上的权值 $+1$。这里树上两点间的距离定义为从一点出发到另外一点的最短路径上边的条数。
+    
     -   在一个节点 $x$ 上的权值 $-v$。
+    
     -   询问树上与一个节点 $x$ 距离为 $1$ 的所有节点上的权值的异或和。
         对于 $100\%$ 的数据，满足 $1\le n \le 5\times 10^5$，$1\le m \le 5\times 10^5$，$0\le a_i \le 10^5$，$1 \le x \le n$，$opt\in\{1,2,3\}$。
         保证任意时刻每个节点的权值非负。
@@ -315,13 +352,13 @@ int merge(int a, int b) {
     
     ??? note "参考代码"
         ```cpp
-        const int _ = 526010;
+        constexpr int _ = 526010;
         int n;
         int V[_];
         int debug = 0;
         
         namespace trie {
-        const int MAXH = 21;
+        constexpr int MAXH = 21;
         int ch[_ * (MAXH + 1)][2], w[_ * (MAXH + 1)], xorv[_ * (MAXH + 1)];
         int tot = 0;
         

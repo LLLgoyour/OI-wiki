@@ -11,7 +11,7 @@ author: Ir1d, LeoJacob, Xeonacid, greyqz, StudyingFather, Marcythm, minghu6, Bac
 给定一个长度为 $n$ 的字符串 $s$，其 **前缀函数** 被定义为一个长度为 $n$ 的数组 $\pi$。
 其中 $\pi[i]$ 的定义是：
 
-1.  如果子串 $s[0\dots i]$ 有一对相等的真前缀与真后缀：$s[0\dots k-1]$ 和 $s[i - (k - 1) \dots i]$，那么 $\pi[i]$ 就是这个相等的真前缀（或者真后缀，因为它们相等））的长度，也就是 $\pi[i]=k$；
+1.  如果子串 $s[0\dots i]$ 有一对相等的真前缀与真后缀：$s[0\dots k-1]$ 和 $s[i - (k - 1) \dots i]$，那么 $\pi[i]$ 就是这个相等的真前缀（或者真后缀，因为它们相等）的长度，也就是 $\pi[i]=k$；
 2.  如果不止有一对相等的，那么 $\pi[i]$ 就是其中最长的那一对的长度；
 3.  如果没有相等的，那么 $\pi[i]=0$。
 
@@ -61,6 +61,8 @@ $\pi[6]=0$，因为 `abcabcd` 无相等的真前缀和真后缀
     
     === "C++"
         ```cpp
+        // 注：
+        // string substr (size_t pos = 0, size_t len = npos) const;
         vector<int> prefix_function(string s) {
           int n = (int)s.length();
           vector<int> pi(n);
@@ -81,15 +83,28 @@ $\pi[6]=0$，因为 `abcabcd` 无相等的真前缀和真后缀
             pi = [0] * n
             for i in range(1, n):
                 for j in range(i, -1, -1):
-                    if s[0 : j] == s[i - j + 1 : i + 1]:
+                    if s[0:j] == s[i - j + 1 : i + 1]:
                         pi[i] = j
                         break
             return pi
         ```
     
-    注：
-    
-    -   `string substr (size_t pos = 0, size_t len = npos) const;`
+    === "Java"
+        ```java
+        static int[] prefix_function(String s) {
+            int n = s.length();
+            int[] pi = new int[n];
+            for (int i = 1; i < n; i++) {
+                for (int j = i; j >= 0; j--) {
+                    if (s.substring(0, j).equals(s.substring(i - j + 1, i + 1))) {
+                        pi[i] = j;
+                        break;
+                    }
+                }
+            }
+            return pi;
+        }
+        ```
 
 显见该算法的时间复杂度为 $O(n^3)$，具有很大的改进空间。
 
@@ -132,10 +147,27 @@ $$
             pi = [0] * n
             for i in range(1, n):
                 for j in range(pi[i - 1] + 1, -1, -1):
-                    if s[0 : j] == s[i - j + 1 : i + 1]:
+                    if s[0:j] == s[i - j + 1 : i + 1]:
                         pi[i] = j
                         break
             return pi
+        ```
+    
+    === "Java"
+        ```java
+        static int[] prefix_function(String s) {
+            int n = s.length();
+            int[] pi = new int[n];
+            for (int i = 1; i < n; i++) {
+                for (int j = pi[i - 1] + 1; j >= 0; j--) {
+                    if (s.substring(0, j).equals(s.substring(i - j + 1, i + 1))) {
+                        pi[i] = j;
+                        break;
+                    }
+                }
+            }
+            return pi;
+        }
         ```
 
 在这个初步改进的算法中，在计算每个 $\pi[i]$ 时，最好的情况是第一次字符串比较就完成了匹配，也就是说基础的字符串比较次数是 `n-1` 次。
@@ -150,13 +182,17 @@ $$
 
 在第一个优化中，我们讨论了计算 $\pi[i+1]$ 时的最好情况：$s[i+1]=s[\pi[i]]$，此时 $\pi[i+1] = \pi[i]+1$。现在让我们沿着这个思路走得更远一点：讨论当 $s[i+1] \neq s[\pi[i]]$ 时如何跳转。
 
-失配时，我们希望找到对于子串 $s[0\dots i]$，仅次于 $\pi[i]$ 的第二长度 $j$，使得在位置 $i$ 的前缀性质仍得以保持，也即 $s[0 \dots j - 1] = s[i - j + 1 \dots i]$：
+![](images/prefix_str_1.svg)
+
+如上图所示，失配时，我们希望找到对于子串 $s[0\dots i]$，仅次于 $\pi[i]$ 的第二长度 $j$，使得在位置 $i$ 的前缀性质仍得以保持，也即 $s[0 \dots j - 1] = s[i - j + 1 \dots i]$：
 
 $$
 \overbrace{\underbrace{s_0 ~ s_1}_j ~ s_2 ~ s_3}^{\pi[i]} ~ \dots ~ \overbrace{s_{i-3} ~ s_{i-2} ~ \underbrace{s_{i-1} ~ s_{i}}_j}^{\pi[i]} ~ s_{i+1}
 $$
 
-如果我们找到了这样的长度 $j$，那么仅需要再次比较 $s[i + 1]$ 和 $s[j]$。如果它们相等，那么就有 $\pi[i + 1] = j + 1$。否则，我们需要找到子串 $s[0\dots i]$ 仅次于 $j$ 的第二长度 $j^{(2)}$，使得前缀性质得以保持，如此反复，直到 $j = 0$。如果 $s[i + 1] \neq s[0]$，则 $\pi[i + 1] = 0$。
+如果我们找到了这样的长度 $j$，那么仅需要再次比较 $s[i + 1]$ 和 $s[j]$。如果它们相等，那么就有 $\pi[i + 1] = j + 1$。否则，我们需要找到子串 $s[0\dots i]$ 仅次于 $j$ 的第二长度 $j^{(2)}$，使得前缀性质得以保持，如此反复，直到 $j = 0$。如果 $s[i + 1] \neq s[0]$，则 $\pi[i + 1] = 0$。第二次比较的示意图如下所示
+
+![](images/prefix_str_2.svg)
 
 观察上图可以发现，因为 $s[0\dots \pi[i]-1] = s[i-\pi[i]+1\dots i]$，所以对于 $s[0\dots i]$ 的第二长度 $j$，有这样的性质：
 
@@ -164,7 +200,11 @@ $$
 s[0 \dots j - 1] = s[i - j + 1 \dots i]= s[\pi[i]-j\dots \pi[i]-1]
 $$
 
-也就是说 $j$ 等价于子串 $s[\pi[i]-1]$ 的前缀函数值，即 $j=\pi[\pi[i]-1]$。同理，次于 $j$ 的第二长度等价于 $s[j-1]$ 的前缀函数值，$j^{(2)}=\pi[j-1]$
+该公式的示意图如下所示：
+
+![](images/prefix_str_3.svg)
+
+也就是说 $j$ 等价于子串 $s[\pi[i]-1]$ 的前缀函数值，对应于上图下半部分，即 $j=\pi[\pi[i]-1]$。同理，次于 $j$ 的第二长度等价于 $s[j-1]$ 的前缀函数值，$j^{(2)}=\pi[j-1]$.
 
 显然我们可以得到一个关于 $j$ 的状态转移方程：$j^{(n)}=\pi[j^{(n-1)}-1], \ \ (j^{(n-1)}>0)$
 
@@ -204,6 +244,25 @@ $$
                 pi[i] = j
             return pi
         ```
+    
+    === "Java"
+        ```java
+        static int[] prefix_function(String s) {
+            int n = s.length();
+            int[] pi = new int[n];
+            for (int i = 1; i < n; i++) {
+                int j = pi[i - 1];
+                while (j > 0 && s.charAt(i) != s.charAt(j)) {
+                    j = pi[j - 1];
+                }
+                if (s.charAt(i) == s.charAt(j)) {
+                    j++;
+                }
+                pi[i] = j;
+            }
+            return pi;
+        }
+        ```
 
 这是一个 **在线** 算法，即其当数据到达时处理它——举例来说，你可以一个字符一个字符的读取字符串，立即处理它们以计算出每个字符的前缀函数值。该算法仍然需要存储字符串本身以及先前计算过的前缀函数值，但如果我们已经预先知道该字符串前缀函数的最大可能取值 $M$，那么我们仅需要存储该字符串的前 $M + 1$ 个字符以及对应的前缀函数值。
 
@@ -211,9 +270,7 @@ $$
 
 ### 在字符串中查找子串：Knuth–Morris–Pratt 算法
 
-该算法由 Knuth、Pratt 和 Morris 在 1977 年共同发布<sup>[\[1\]](https://epubs.siam.org/doi/abs/10.1137/0206024)</sup>。
-
-该任务是前缀函数的一个典型应用。
+该算法由 Knuth、Pratt 和 Morris 在 1977 年共同发布[^kmp]。该任务是前缀函数的一个典型应用。
 
 #### 过程
 
@@ -223,7 +280,9 @@ $$
 
 我们构造一个字符串 $s + \# + t$，其中 $\#$ 为一个既不出现在 $s$ 中也不出现在 $t$ 中的分隔符。接下来计算该字符串的前缀函数。现在考虑该前缀函数除去最开始 $n + 1$ 个值（即属于字符串 $s$ 和分隔符的函数值）后其余函数值的意义。根据定义，$\pi[i]$ 为右端点在 $i$ 且同时为一个前缀的最长真子串的长度，具体到我们的这种情况下，其值为与 $s$ 的前缀相同且右端点位于 $i$ 的最长子串的长度。由于分隔符的存在，该长度不可能超过 $n$。而如果等式 $\pi[i] = n$ 成立，则意味着 $s$ 完整出现在该位置（即其右端点位于位置 $i$）。注意该位置的下标是对字符串 $s + \# + t$ 而言的。
 
-因此如果在某一位置 $i$ 有 $\pi[i] = n$ 成立，则字符串 $s$ 在字符串 $t$ 的 $i - (n - 1) - (n + 1) = i - 2n$ 处出现。
+因此如果在某一位置 $i$ 有 $\pi[i] = n$ 成立，则字符串 $s$ 在字符串 $t$ 的 $i - (n - 1) - (n + 1) = i - 2n$ 处出现。下图所示为索引的示意图。
+
+![](./images/strstr_kmp_indices.svg)
 
 正如在前缀函数的计算中已经提到的那样，如果我们知道前缀函数的值永远不超过一特定值，那么我们不需要存储整个字符串以及整个前缀函数，而只需要二者开头的一部分。在我们这种情况下这意味着只需要存储字符串 $s + \#$ 以及相应的前缀函数值即可。我们可以一次读入字符串 $t$ 的一个字符并计算当前位置的前缀函数值。
 
@@ -247,7 +306,7 @@ $$
     === "Python"
         ```python
         def find_occurrences(t, s):
-            cur = s + '#' + t
+            cur = s + "#" + t
             sz1, sz2 = len(t), len(s)
             ret = []
             lps = prefix_function(cur)
@@ -255,6 +314,22 @@ $$
                 if lps[i] == sz2:
                     ret.append(i - 2 * sz2)
             return ret
+        ```
+    
+    === "Java"
+        ```java
+        static List<Integer> find_occurrences(String text, String pattern) {
+            String cur = pattern + '#' + text;
+            int sz1 = text.length(), sz2 = pattern.length();
+            List<Integer> v = new ArrayList<>();
+            int[] lps = prefix_function(cur);
+            for (int i = sz2 + 1; i <= sz1 + sz2; i++) {
+                if (lps[i] == sz2) {
+                    v.add(i - 2 * sz2);
+                }
+            }
+            return v;
+        }
         ```
 
 ### 字符串的周期
@@ -456,12 +531,12 @@ $$
 
 ## 练习题目
 
--   [UVA 455 "Periodic Strings"](http://uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=396)
--   [UVA 11022 "String Factoring"](http://uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=1963)
--   [UVA 11452 "Dancing the Cheeky-Cheeky"](http://uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=2447)
--   [UVA 12604 - Caesar Cipher](https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=4282)
--   [UVA 12467 - Secret Word](https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=3911)
--   [UVA 11019 - Matrix Matcher](https://uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=1960)
+-   [UVa 455 "Periodic Strings"](http://uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=396)
+-   [UVa 11022 "String Factoring"](http://uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=1963)
+-   [UVa 11452 "Dancing the Cheeky-Cheeky"](http://uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=2447)
+-   [UVa 12604 - Caesar Cipher](https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=4282)
+-   [UVa 12467 - Secret Word](https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=3911)
+-   [UVa 11019 - Matrix Matcher](https://uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=1960)
 -   [SPOJ - Pattern Find](http://www.spoj.com/problems/NAJPF/)
 -   [Codeforces - Anthem of Berland](http://codeforces.com/contest/808/problem/G)
 -   [Codeforces - MUH and Cube Walls](http://codeforces.com/problemset/problem/471/D)
@@ -470,4 +545,6 @@ $$
 
 **本页面主要译自博文 [Префикс-функция. Алгоритм Кнута-Морриса-Пратта](http://e-maxx.ru/algo/prefix_function) 与其英文翻译版 [Prefix function. Knuth–Morris–Pratt algorithm](https://cp-algorithms.com/string/prefix-function.html)。其中俄文版版权协议为 Public Domain + Leave a Link；英文版版权协议为 CC-BY-SA 4.0。**
 
-[^ref1]: [金策 - 字符串算法选讲](https://wenku.baidu.com/view/850f93f4fbb069dc5022aaea998fcc22bcd1433e.html)
+[^ref1]: [金策 - 字符串算法选讲](https://github.com/hzwer/shareOI/blob/master/%E5%AD%97%E7%AC%A6%E4%B8%B2/%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95%E9%80%89%E8%AE%B2_%E9%87%91%E7%AD%96.pdf)
+
+[^kmp]: Knuth, Donald E., James H. Morris, Jr, and Vaughan R. Pratt. "Fast pattern matching in strings." SIAM journal on computing 6.2 (1977): 323-350.[doi: 10.1137/0206024](https://epubs.siam.org/doi/abs/10.1137/0206024)

@@ -40,10 +40,6 @@ Object *c;
 
 对于 `struct`，它的所有成员都是默认 `public`。对于 `class`，它的所有成员都是默认 `private`。
 
-*关于 "友元" 和 "派生类"，可以参考下方折叠框，或者查询网络资料进行详细了解。*
-
-*对于算法竞赛来说，友元和派生类并不是必须要掌握的知识点。*
-
 ??? note "关于友元以及派生类的基本概念"
     友元（`friend`）：使用 `friend` 关键字修饰某个函数或者类。可以使得在 **被修饰者** 在不成为成员函数或者成员类的情况下，访问该类的私有（`private`）或者受保护（`protected`）成员。简单来说就是只要带有这个类的 `friend` 标记，就可以访问私有或受保护的成员元素。
     
@@ -127,17 +123,17 @@ class Vector {
 
   Vector(int _x, int _y) : x(_x), y(_y) {}
 
-  int operator*(const Vector& other) { return x * other.x + y * other.y; }
+  int operator*(const Vector& other) const { return x * other.x + y * other.y; }
 
-  Vector operator+(const Vector&);
-  Vector operator-(const Vector&);
+  Vector operator+(const Vector&) const;
+  Vector operator-(const Vector&) const;
 };
 
-Vector Vector::operator+(const Vector& other) {
+Vector Vector::operator+(const Vector& other) const {
   return Vector(x + other.x, y + other.y);
 }
 
-Vector Vector::operator-(const Vector& other) {
+Vector Vector::operator-(const Vector& other) const {
   return Vector(x - other.x, y - other.y);
 }
 
@@ -194,7 +190,7 @@ class Object {
 
 若无显式的构造函数，则编译器认为该类有隐式的默认构造函数。换言之，若无定义任何构造函数，则编译器会自动生成一个默认构造函数，并会根据成员元素的类型进行初始化（与定义 内置类型 变量相同）。
 
-在这种情况下，成员元素都是未初始化的，访问未初始化的变量的结果是未定义的（也就是说并不知道会返回和值）。
+在这种情况下，成员元素都是未初始化的，访问未初始化的变量的结果是未定义的（也就是说并不知道会返回何值）。
 
 如果需要自定义初始化的值，可以再定义（或重载）构造函数。
 
@@ -205,7 +201,7 @@ class Object {
 
 使用 C++11 或以上时，可以使用 `{}` 进行变量的初始化。
 
-??? note " 关于 `{}`"
+??? note "关于 `{}`"
     使用 `{}` 进行初始化，会用到 std::initializer\_list 这一个轻量代理对象进行初始化。
     
     初始化步骤大概如下

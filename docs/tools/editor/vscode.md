@@ -1,10 +1,28 @@
-author: NachtgeistW, Ir1d, ouuan, Enter-tainer, Xeonacid, ChungZH, keepthethink, abc1763613206, partychicken, Chrogeek, xkww3n, HeliumOI, Pinghigh, xiaofu-15191
+author: NachtgeistW, Ir1d, ouuan, Enter-tainer, Xeonacid, ChungZH, keepthethink, abc1763613206, partychicken, Chrogeek, xkww3n, HeliumOI, Pinghigh, xiaofu-15191, Sekakou
 
 ## 简介
 
 Visual Studio Code（以下简称 VS Code）是一个由微软开发，同时支持 Windows、Linux 和 macOS 等操作系统且开放源代码的代码编辑器。它是用 TypeScript 编写的，并且采用 Electron 架构。它带有对 JavaScript、TypeScript 和 Node.js 的内置支持，并为其他语言（如 C、C++、Java、Python、PHP、Go）提供了丰富的扩展生态系统。
 
 官网：[Visual Studio Code - Code Editing. Redefined](https://code.visualstudio.com/)
+
+## 使用 C/C++ Compile Run 扩展运行代码
+
+C/C++ Compile Run 是一个专注于 C/C++ 单文件编译与运行的插件。它免去了传统 C/C++ 插件中繁琐的配置步骤，非常适合编程竞赛的需要，上手迅速，操作简单。
+
+打开 VS Code，点击左侧边栏的「扩展」图标（或按下<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>），在搜索框中输入 `C++`，找到 C/C++ Compile Run，点击「安装/Install」即可。
+
+![](./images/vscode-14.png)
+
+安装完成后，无需额外配置，插件会根据环境变量自动适配已配置好的 MinGW 编译器。
+
+打开需要运行的文件，点击右上角的三角图标即可运行代码。
+
+快捷键：
+
+-   <kbd>F6</kbd>- 编译并在 VS Code 内置集成终端中运行
+-   <kbd>F7</kbd>- 以自定义参数编译并以自定义参数在 VS Code 内置集成终端运行
+-   <kbd>F8</kbd>- 编译并在外部终端中运行
 
 ## 使用 Code Runner 扩展运行代码
 
@@ -18,12 +36,12 @@ Code Runner 是一个可以一键运行代码的扩展，在工程上一般用�
 
 安装完成后，打开需要运行的文件，点击右上角的小三角图标即可运行代码；按下快捷键<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd>（在 macOS 下是<kbd>Control</kbd>+<kbd>Option</kbd>+<kbd>N</kbd>）也可以得到同样的效果。
 
-???+ warning
+???+ warning "Warning"
     如果安装了 VS Code 与 Code Runner 后，代码仍然无法运行，很有可能是因为系统尚未安装 C/C++ 的运行环境，参考 [Hello, World! 页面](../../lang/helloworld.md) 以安装。
     
     记得勾选设置中的 Run In Terminal 选项，如图：![](./images/vscode-7.png)
 
-## 使用 C/C++ 扩展编译并调试
+## 使用 C/C++ 扩展编译并调试/智能补全代码
 
 ### 安装扩展
 
@@ -31,16 +49,8 @@ Code Runner 是一个可以一键运行代码的扩展，在工程上一般用�
 
 ![](./images/vscode-2.png)
 
-???+ warning
+???+ warning "Warning"
     在配置前，请确保系统已经安装了 G++ 或 Clang，并已添加到了 `PATH` 中。请使用 CMD 或者 PowerShell，而不是 Git Bash 作为集成终端。
-
-### 配置 IntelliSense
-
-用于调整 VS Code 的智能补全。
-
-如果你使用 Clang 编译器，在「IntelliSense 模式」中选择 `clang-x64` 而非默认的 `msvc-x64`；如果你使用 G++ 编译器，选择 `gcc-x64` 以使用自动补全等功能。否则会得到「IntelliSense 模式 msvc-x64 与编译器路径不兼容。」的错误。
-
-![](images/vscode-4.png)
 
 ### 配置 GDB/LLDB 调试器
 
@@ -49,7 +59,7 @@ Code Runner 是一个可以一键运行代码的扩展，在工程上一般用�
 在 VS Code 中新建一份 C++ 代码文件，按照 C++ 语法写入一些内容（如 `int main(){}`），保存并按下<kbd>F5</kbd>，进入调试模式。
 如果出现了「选择调试器」的提示，选择 `C++ (GDB/LLDB)`。在「选择配置」中，G++ 用户选择 `g++.exe - 生成和调试活动文件`；Clang 用户选择 `clang++ - 生成和调试活动文件`。
 
-???+ warning
+???+ warning "Warning"
     配置名称并非固定，而是可以自定义的。不同的操作系统可能具有不同的配置名称。
 
 完成后，VS Code 将自动完成初始化操作在下方的集成终端中启动调试。至此，GDB 所有的配置流程已经完毕。
@@ -60,7 +70,7 @@ Code Runner 是一个可以一键运行代码的扩展，在工程上一般用�
 
 ![](images/vscode-9.png)
 
-先按照上文 GDB 的配置过程操作一遍，然后删除 `.vscode/launch.json`，按下<kbd>F5</kbd>，选择 `LLDB`，再把 `launch.json` 中的 `${workspaceFolder}/<executable file>` 更改为 `${fileDirname}/${fileBasenameNoExtension}.exe` 即可。
+先按照上文 GDB 的配置过程操作一遍，然后删除 `.vscode/launch.json`，按下<kbd>F5</kbd>，选择 `LLDB`，再把 `launch.json` 中的 `${workspaceFolder}/<executable file>` 更改为 `${fileDirname}/${fileBasenameNoExtension}` 即可。
 
 至此，LLDB 配置完成。再次按下<kbd>F5</kbd>即可看到软件下方的调试信息。
 
@@ -78,11 +88,26 @@ Code Runner 是一个可以一键运行代码的扩展，在工程上一般用�
 
 如果编辑器未自动跳转，点击左侧工具栏中的「调试」图标进入调试窗口，即可在左侧看到变量的值。
 
+在「监视」中，你可以输入表达式，在每一次进行 `next` 或 `step` 等操作时都会重新求值并显示。
+
+在「调用堆栈」中，你可以看见当前函数执行的栈帧。
+
+???+ note "Tip"
+    你可以参照 [GDB 官方文档](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Arrays.html) 来查看某个数组一段区间内的内容。
+
 在调试模式中，编辑器将以黄色底色显示下一步将要执行的代码。
+
+### 配置 IntelliSense
+
+用于调整 VS Code 的智能补全。
+
+如果你使用 Clang 编译器，在「IntelliSense 模式」中选择 `clang-x64` 而非默认的 `msvc-x64`；如果你使用 G++ 编译器，选择 `gcc-x64` 以使用自动补全等功能。否则会得到「IntelliSense 模式 msvc-x64 与编译器路径不兼容。」的错误。
+
+![](images/vscode-4.png)
 
 ## 配置 clangd
 
-???+ warning
+???+ warning "Warning"
     由于功能冲突，安装 clangd 扩展后 C/C++ 扩展的 IntelliSense 功能将被禁用（调试等功能仍然使用 C/C++ 扩展）。如果 clangd 扩展的功能出现问题，可以查看是否禁用了 C/C++ 扩展的 IntelliSense 功能。
 
 ### clangd 简介
@@ -106,6 +131,45 @@ VS Code 的 C/C++ 扩展也有自动补全等功能，但在提示信息的易�
 ![](images/vscode-8.png)
 
 如果下方弹出 clangd 要求关闭 Intellisense 的对话框，点击 "Disable Intellisense"，重新加载工作区，就可以享受 clangd 的自动补全等功能了。
+
+## 编辑
+
+### 语法设置
+
+在新打开的编辑器中点击「选择语言」，即可打开对应的语法高亮，如图：
+
+![](images/vscode-11.apng)
+
+### 快捷键
+
+部分快捷键：
+
+| 按键                                                            | 操作                        |
+| ------------------------------------------------------------- | ------------------------- |
+| <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>X</kbd>                     | 复制/剪切当前行（当没有选择内容时）        |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>K</kbd>                 | 删除当前行                     |
+| <kbd>Alt</kbd>+<kbd>Up</kbd>/<kbd>Down</kbd>                  | 行上移/下移                    |
+| <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Up</kbd>/<kbd>Down</kbd> | 行向上/向下复制                  |
+| <kbd>Ctrl</kbd>+<kbd>/</kbd>                                  | 切换行注释                     |
+| <kbd>Ctrl</kbd>+<kbd>\[</kbd>/<kbd>]</kbd>                    | 行向左/右缩进                   |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\[</kbd>/<kbd>]</kbd>   | 行折叠/展开                    |
+| <kbd>Ctrl</kbd>+<kbd>P</kbd>                                  | 打开最近打开的文件                 |
+| <kbd>Alt</kbd>+<kbd>Z</kbd>                                   | 切换自动折行                    |
+| <kbd>Alt</kbd>+<kbd>F12</kbd>                                 | 速览定义（如函数的定义）              |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>\\</kbd>                | 跳转到匹配括号                   |
+| <kbd>Ctrl</kbd>+<kbd>T</kbd>                                  | 在工作区中查找符号（在文件夹中查找指定名称函数等） |
+
+### 多光标
+
+按住<kbd>Alt</kbd>并单击即可在编辑器中添加光标，多数编辑操作都可同时进行；按住鼠标中键并在编辑器中移动也可添加多行光标，如图：
+
+![](images/vscode-12.gif)
+
+按<kbd>Ctrl</kbd>+<kbd>F2</kbd>可在编辑器中同时更改所有匹配项，如图：
+
+![](images/vscode-13.gif)
+
+注意此时在右上角会有一个工具栏，可在其中开启查找匹配项时是否开启大小写匹配、全字匹配等。
 
 ## 参考资料与注释
 

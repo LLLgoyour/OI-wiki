@@ -86,7 +86,7 @@ $$
 
 根据定义可以求得其期望 $EI_A = P(A)$。这一转化在实际应用中非常常见。
 
-??? example 例子
+??? example "例子"
     假设对于一个长为 $n$ 的序列 $\{ a_i \}$，其中 $a_k$ 以 $p_k$ 的概率取 $k$，以 $1 - p_k$ 的概率取 $0$。考虑如何求 $S = \sum_{i=1}^{n} a_i$ 的期望。
     
     如果使用定义直接求，需要求出 $S$ 在每个可能取值处的概率，这个计算过程比较繁琐，这里不展开叙述。
@@ -131,9 +131,8 @@ $$
 
 ### 应用
 
-例题：[\[LA 7736\]Pocky](https://icpcarchive.ecs.baylor.edu/index.php?option=com_onlinejudge&Itemid=8&category=767&page=show_problem&problem=5758)
-
-题意：有一根长为 $L$ 的 Pocky，每次随机折成两段。若右边一段的长度不大于 $d$ 则停止，否则对右边一段重复上述过程。求重复次数的期望。
+???+ example "[HDU 5984 Pocky](https://acm.hdu.edu.cn/showproblem.php?pid=5984)"
+    有一根长为 $L$ 的 Pocky，每次随机折成两段。若右边一段的长度不大于 $d$ 则停止，否则对右边一段重复上述过程。求重复次数的期望。
 
 ??? note "题解"
     记 $f(x)$ 表示长度为 $x$ 的期望次数。$x \leq d$ 的情形平凡。

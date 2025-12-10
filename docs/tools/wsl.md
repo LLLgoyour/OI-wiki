@@ -4,8 +4,6 @@ author: GoodCoder666, Ir1d, H-J-Granger, NachtgeistW, StudyingFather, Enter-tain
 
 本章主要介绍了在 Windows 系统下使用 Windows Subsystem for Linux 运行 Linux 环境的方法。
 
-***
-
 ## 引言[^ref1]
 
 现在大部分学校的竞赛练习环境都是构建在 Windows 系操作系统上，但是在 NOI 系列赛中，已经用上了 NOI Linux 这个 Ubuntu 操作系统的修改版。
@@ -61,13 +59,11 @@ Windows 10 在一周年更新时推出了 Linux 子系统（WSL），在 2020 �
     
     WSL 仅在 64 位 Windows 10 版本 1607 及以上、Windows 11 和 Windows Server 2019/2022 中可用。
 
-***
-
 ## 启用 WSL[^ref3]
 
 ### 自动安装
 
-???+ warning
+???+ warning "Warning"
     本部分适用于 Windows 10 版本 2004 及更高版本（内部版本 19041 及更高版本）或 Windows 11。
     
     如果你正在使用 2004 以下版本或你的电脑不支持虚拟化，请阅读下面的手动安装一节。
@@ -84,14 +80,14 @@ Windows 10 在一周年更新时推出了 Linux 子系统（WSL），在 2020 �
 
 ### 手动安装[^ref4]
 
-???+ warning
+???+ warning "Warning"
     下面介绍手动安装 WSL 的步骤。如果你已经完成了自动安装，请跳过此部分。
 
 #### 启用适用于 Linux 的 Windows 子系统
 
 在安装适用于 WSL 的任何 Linux 分发版之前，必须在下述两种方法中选择一种，以确保启用「适用于 Linux 的 Windows 子系统」可选功能：
 
-**使用命令行：**
+使用命令行：
 
 1.  以管理员身份打开 PowerShell 并运行：
 
@@ -103,7 +99,7 @@ Windows 10 在一周年更新时推出了 Linux 子系统（WSL），在 2020 �
 
 2.  出现提示时，重启计算机。
 
-**使用图形界面：**
+使用图形界面：
 
 ![Windows 功能](./images/wsl-windows-features.png)
 
@@ -142,7 +138,7 @@ wsl --set-default-version 2
 
 进入 Microsoft Store，搜索「Ubuntu」，然后选择「Ubuntu」，点击「安装」进行安装。也可打开 [Ubuntu 的商店页面](https://www.microsoft.com/zh-cn/p/ubuntu/9nblggh4msv6)。
 
-???+ warning
+???+ warning "Warning"
     Microsoft Store 的 Ubuntu 随着 Ubuntu 的更新而更新，因此内容可能会有所改变。如果想获取稳定的 Ubuntu 长期支持版，可以在 Microsoft Store 安装 Ubuntu 的 LTS 版本。
 
 ## 配置分发版[^ref5]
@@ -159,25 +155,33 @@ wsl --set-default-version 2
 
 第一次运行 Ubuntu，需要完成初始化。
 
+```console
     Installing, this may take a few minutes...
+```
 
 等待一两分钟时间，系统会提示创建新的用户帐户。
 
+```console
     Please create a default UNIX user account. The username does not need to match your Windows username.
     For more information visit: https://aka.ms/wslusers
     Enter new UNIX username: chtholly
+```
 
 输入完用户名以后会提示输入密码。在 Linux 中，输入密码时屏幕上不显示文字属于正常现象。
 
+```console
     Enter new UNIX password:
+```
 
 设置好帐户名和密码后，WSL 就安装完成了。
 
+```console
     Installation successful!
     To run a command as administrator (user "root"), use "sudo <command>".
     See "man sudo_root" for details.
-
+    
     chtholly@SENIORIOUS:~$
+```
 
 ## 基础配置
 
@@ -229,6 +233,9 @@ $
 
 下一个菜单中选择 `zh_CN.UTF-8` 回车。
 
+<!-- preprocess.skipdetails on -->
+
+```text
     Default locale for the system environment:
 
                  None
@@ -237,6 +244,9 @@ $
                 [zh_CN.UTF-8]
 
             <Ok>            <Cancel>
+```
+
+<!-- preprocess.skipdetails off -->
 
 之后关闭 WSL 并重启，系统就会变成中文。
 
@@ -270,7 +280,7 @@ $ ./cpuid
 AMD Ryzen 5 1400 Quad-Core Processor
 ```
 
-???+ note
+???+ note "Note"
     Linux 环境下可执行文件可不带扩展名，运行方式参见上方命令。
 
 ## 进阶操作
@@ -313,7 +323,7 @@ $ sudo service xrdp restart
 
 ![不换端口的结果](./images/wsl-result-of-not-changing-ports.png)
 
-运行命令 `sudo sed 's/port=[0-9]{1,5}/port=otherport/' /etc/xrdp/xrdp.ini`，其中 `otherport` 为其他端口（如 `3390`）。
+运行命令 `sudo sed -i 's/port=[0-9]\{1,5\}/port=otherport/' /etc/xrdp/xrdp.ini`，其中 `otherport` 为其他端口（如 `3390`）。
 
     [globals]
     ...
@@ -402,7 +412,7 @@ Welcome!
 
 ## WSL1 升级为 WSL2
 
-???+ warning
+???+ warning "Warning"
     请确认已经完成前面 WSL1 的安装步骤。
 
 执行命令 `wsl -l -v` 可以看到 WSL 版本号是 1，需要执行升级，才能到 2。

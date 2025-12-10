@@ -2,7 +2,7 @@ author: sbofgayschool
 
 `std::pair` 是标准库中定义的一个类模板。用于将两个变量关联在一起，组成一个「对」，而且两个变量的数据类型可以是不同的。
 
-??? 类模板
+??? note "类模板"
     类模板（class template）本身不是一个类，而是可以根据 **不同数据类型** 产生 **不同类** 的「模板」。
     
     在使用时，编译器会根据传入的数据类型产生对应的类，再创建对应实例。
@@ -11,7 +11,7 @@ author: sbofgayschool
 
 通过灵活使用 `pair`，可以轻松应对 **需要将关联数据捆绑存储、处理** 的场景。
 
-??? pair 与自定义 struct
+??? note "Struct"
     与自定义的 `struct` 相比，`pair` 不需要额外定义结构与重载运算符，因此使用起来更加简便。
     
     然而，自定义 `struct` 的变量命名往往更加清晰（`pair` 只能使用 `first` 与 `second` 访问包含的两个变量）。同时，如果需要将两个以上的变量进行关联，自定义 `struct` 会更加合适。
@@ -80,7 +80,7 @@ if (p2 >= p3) {
 由于 `pair` 定义了 STL 中常用的 `<` 与 `==`，使得其能够很好的与其他 STL 函数或数据结构配合。比如，`pair` 可以作为 `priority_queue` 的数据类型。
 
 ```cpp
-priority_queue<pair<int, double> > q;
+priority_queue<pair<int, double>> q;
 ```
 
 ### 赋值与交换
@@ -131,8 +131,8 @@ for (int i = 0; i < n; i++) {
 那么，在 Dijkstra 算法的堆优化中，可以使用 `pair` 与 `priority_queue` 维护节点，将节点当前到起点的距离作为第一个变量，将节点编号作为第二个变量。
 
 ```cpp
-priority_queue<pair<int, int>, std::vector<pair<int, int> >,
-               std::greater<pair<int, int> > >
+priority_queue<pair<int, int>, std::vector<pair<int, int>>,
+               std::greater<pair<int, int>>>
     q;
 ... while (!q.empty()) {
   // dis为入堆时节点到起点的距离，i为节点编号

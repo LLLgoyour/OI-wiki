@@ -1,4 +1,4 @@
-author: Ir1d, CBW2007, ChungZH, xhn16729, Xeonacid, tptpp, hsfzLZH1, ouuan, Marcythm, HeRaNO, greyqz, Chrogeek, partychicken, zhb2000, xyf007, Persdre, XiaoSuan250
+author: Ir1d, CBW2007, ChungZH, xhn16729, Xeonacid, tptpp, hsfzLZH1, ouuan, Marcythm, HeRaNO, greyqz, Chrogeek, partychicken, zhb2000, xyf007, Persdre, XiaoSuan250, hhc0001, ZhangZhanhaoxiang, Taoran\_01
 
 本页面主要介绍了动态规划的基本思想，以及动态规划中状态及状态转移方程的设计思路，帮助各位初学者对动态规划有一个初步的了解。
 
@@ -80,7 +80,7 @@ author: Ir1d, CBW2007, ChungZH, xhn16729, Xeonacid, tptpp, hsfzLZH1, ouuan, Marc
 ???+ note "最长公共子序列问题"
     给定一个长度为 $n$ 的序列 $A$ 和一个 长度为 $m$ 的序列 $B$（$n,m \leq 5000$），求出一个最长的序列，使得该序列既是 $A$ 的子序列，也是 $B$ 的子序列。
 
-子序列的定义可以参考 [子序列](../string/basic.md)。一个简要的例子：字符串 `abcde` 与字符串 `acde` 的公共子序列有 `a`、`c`、`d`、`e`、`ac`、`ad`、`ae`、`cd`、`ce`、`de`、`ade`、`ace`、`cde`、`acde`，最长公共子序列的长度是 4。
+子序列的定义可以参考 [子序列](../string/basic.md)。一个简要的例子：字符串 `abcde` 与字符串 `acde` 的公共子序列有 `a`、`c`、`d`、`e`、`ac`、`ad`、`ae`、`cd`、`ce`、`de`、`acd`、`ade`、`ace`、`cde`、`acde`，最长公共子序列的长度是 4。
 
 设 $f(i,j)$ 表示只考虑 $A$ 的前 $i$ 个元素，$B$ 的前 $j$ 个元素时的最长公共子序列的长度，求这时的最长公共子序列的长度就是 **子问题**。$f(i,j)$ 就是我们所说的 **状态**，则 $f(n,m)$ 是最终要达到的状态，即为所求结果。
 
@@ -92,113 +92,88 @@ $$
 
 可参考 [SourceForge 的 LCS 交互网页](http://lcs-demo.sourceforge.net/) 来更好地理解 LCS 的实现过程。
 
+???+ example "参考实现"
+    === "C++"
+        ```cpp
+        --8<-- "docs/dp/code/basic/lcs.cpp:core"
+        ```
+    
+    === "Python"
+        ```cpp
+        --8<-- "docs/dp/code/basic/lcs.py:core"
+        ```
+
 该做法的时间复杂度为 $O(nm)$。
 
 另外，本题存在 $O\left(\dfrac{nm}{w}\right)$ 的算法[^ref1]。有兴趣的同学可以自行探索。
 
-```cpp
-int a[MAXN], b[MAXM], f[MAXN][MAXM];
-
-int dp() {
-  for (int i = 1; i <= n; i++)
-    for (int j = 1; j <= m; j++)
-      if (a[i] == b[j])
-        f[i][j] = f[i - 1][j - 1] + 1;
-      else
-        f[i][j] = std::max(f[i - 1][j], f[i][j - 1]);
-  return f[n][m];
-}
-```
-
 ## 最长不下降子序列
 
 ???+ note "最长不下降子序列问题"
-    给定一个长度为 $n$ 的序列 $A$（$n \leq 5000$），求出一个最长的 $A$ 的子序列，满足该子序列的后一个元素不小于前一个元素。
+    给定一个长度为 $n$ 的序列 $a$（$n \leq 5000$），求出一个最长的 $a$ 的子序列，满足该子序列的后一个元素不小于前一个元素。
 
 ### 算法一
 
-设 $f(i)$ 表示以 $A_i$ 为结尾的最长不下降子序列的长度，则所求为 $\max_{1 \leq i \leq n} f(i)$。
+设 $f(i)$ 表示以 $a_i$ 为结尾的最长不下降子序列的长度，则所求为 $\max_{1 \leq i \leq n} f(i)$。
 
-计算 $f(i)$ 时，尝试将 $A_i$ 接到其他的最长不下降子序列后面，以更新答案。于是可以写出这样的状态转移方程：$f(i)=\max_{1 \leq j < i, A_j \leq A_i} (f(j)+1)$。
+计算 $f(i)$ 时，尝试将 $a_i$ 接到其他的最长不下降子序列后面，以更新答案。于是可以写出这样的状态转移方程：$f(i)=\max_{1 \leq j < i,~a_j \leq a_i} (f(j)+1)$。
+
+???+ example "参考实现"
+    === "C++"
+        ```cpp
+        --8<-- "docs/dp/code/basic/lis-1.cpp:core"
+        ```
+    
+    === "Python"
+        ```python
+        --8<-- "docs/dp/code/basic/lis-1.py:core"
+        ```
 
 容易发现该算法的时间复杂度为 $O(n^2)$。
 
-=== "C++"
-    ```cpp
-    int a[MAXN], d[MAXN];
-    
-    int dp() {
-      d[1] = 1;
-      int ans = 1;
-      for (int i = 2; i <= n; i++) {
-        d[i] = 1;
-        for (int j = 1; j < i; j++)
-          if (a[j] <= a[i]) {
-            d[i] = max(d[i], d[j] + 1);
-            ans = max(ans, d[i]);
-          }
-      }
-      return ans;
-    }
-    ```
-
-=== "Python"
-    ```python
-    a = [0] * MAXN
-    d = [0] * MAXN
-    def dp():
-        d[1] = 1
-        ans = 1
-        for i in range(2, n + 1):
-            for j in range(1, i):
-                if a[j] <= a[i]:
-                    d[i] = max(d[i], d[j] + 1)
-                    ans = max(ans, d[i])
-        return ans
-    ```
-
-### 算法二[^ref2]
+### 算法二
 
 当 $n$ 的范围扩大到 $n \leq 10^5$ 时，第一种做法就不够快了，下面给出了一个 $O(n \log n)$ 的做法。
 
-首先，定义 $a_1 \dots a_n$ 为原始序列，$d$ 为当前的不下降子序列，$len$ 为子序列的长度，那么 $d_{len}$ 就是长度为 $len$ 的不下降子序列末尾元素。
+考虑之前定义的状态 $(i, l)$，表示序列以第 $i$ 个元素结尾的不下降子序列最长为 $l$。不同于以往按固定 $i$ 处理状态的方法，这里直接判断 $(i, l)$ 是否合法：
 
-初始化：$d_1=a_1,len=1$。
+-   初始状态 $(1,1)$ 必然合法。
+-   对于任意 $(i, l)$，如果存在 $j < i$ 且 $(j, l-1)$ 合法，同时 $a_j \le a_i$，则 $(i, l)$ 合法。
 
-现在我们已知最长的不下降子序列长度为 1，那么我们让 $i$ 从 2 到 $n$ 循环，依次求出前 $i$ 个元素的最长不下降子序列的长度，循环的时候我们只需要维护好 $d$ 这个数组还有 $len$ 就可以了。**关键在于如何维护。**
+最终，只需要找到合法状态中 $l$ 最大的 $(i,l)$，即可得到最长不下降子序列的长度。
 
-考虑进来一个元素 $a_i$：
+设原序列为 $a_1, \cdots, a_n$，定义数组 $d$，其中第 $x$ 位表示长度为 $x$ 的不下降子序列末尾元素的最小值。初始时序列为空。令 $i$ 从 $1$ 到 $n$ 遍历，依次求出前 $i$ 个元素的最长不下降子序列的长度。对于当前元素 $a_i$：
 
-1.  元素大于等于 $d_{len}$，直接将该元素插入到 $d$ 序列的末尾。
-2.  元素小于 $d_{len}$，找到 **第一个** 大于它的元素，用 $a_i$ 替换它。
+-   如果 $a_i$ 大于等于序列 $d$ 中最后一个元素，直接将元素 $a_i$ 插入到序列 $d$ 的末尾。
+    -   解释：若 $a_i$ 大于等于当前最长子序列的末尾元素，说明存在一个不下降子序列可以接上 $a_i$。不插入将破坏最优性。
+-   如果 $a_i$ 严格小于 $d$ 中最后一个元素，找到 **第一个** 大于它的元素，并用 $a_i$ 替换它。
+    -   解释：若直接插在末尾，会破坏 $d$ 的单调性；替换操作可以保证每个长度的末尾元素尽可能小，从而为后续元素保留更多可能性。
+    -   优化：因为 $d$ 单调不减，可用二分查找直接找到元素的插入位置，将整体复杂度降低到 $O(n\log n)$ 而非暴力查找的 $O(n^2)$。
 
-参考代码如下：
+如果还要输出具体的最长不下降子序列，可以额外维护数组 $d'_x$，表示长度为 $x$ 的不下降子序列中末尾最小元素的位置（有多个可任选一个）。具体维护时，只需要在插入元素 $a_i$ 到 $d_x$ 时，同时更新 $d'_x$ 为 $i$ 即可。同时，需要记录 $i$ 的最优前驱 $p_i$ 为 $d'_{x-1}$。最终，从任意最大长度状态出发，沿前驱 $p_i$ 回溯，即可得到完整子序列。
 
-=== "C++"
-    ```cpp
-    for (int i = 0; i < n; ++i) scanf("%d", a + i);
-    memset(dp, 0x1f, sizeof dp);
-    mx = dp[0];
-    for (int i = 0; i < n; ++i) {
-      *std::upper_bound(dp, dp + n, a[i]) = a[i];
-    }
-    ans = 0;
-    while (dp[ans] != mx) ++ans;
-    ```
+???+ example "参考实现"
+    === "C++"
+        ```cpp
+        --8<-- "docs/dp/code/basic/lis-2.cpp:core"
+        ```
+    
+    === "Python"
+        ```python
+        --8<-- "docs/dp/code/basic/lis-2.py:core"
+        ```
 
-=== "Python"
-    ```python
-    dp = [0x1f1f1f1f] * MAXN
-    mx = dp[0]
-    for i in range(0, n):
-        bisect.insort_left(dp, a[i], 0, len(dp))
-    ans = 0
-    while dp[ans] != mx:
-        ans += 1
-    ```
+该算法的时间复杂度为 $O(n\log n)$。输出答案的时间复杂度为 $O(\textit{ans})$。
+
+???+ tip "注意"
+    对于最长 **上升** 子序列问题，类似地，可以令 $d_i$ 表示所有长度为 $i$ 的最长上升子序列的末尾元素的最小值。
+    
+    需要注意的是，在步骤 2 中，若 $a_i \leq d_{len}$，由于最长上升子序列中相邻元素不能相等，需要在 $d$ 序列中找到 **第一个**  **不小于**  $a_i$ 的元素，用 $a_i$ 替换之。
+    
+    在实现上（以 C++ 为例），需要将 `upper_bound` 函数改为 `lower_bound`。
 
 ## 参考资料与注释
 
-[^ref1]: [位运算求最长公共子序列 - -Wallace- - 博客园](https://www.cnblogs.com/-Wallace-/p/bit-lcs.html)
+-   [最长不下降子序列 nlogn 算法详解 - lvmememe - 博客园](https://www.cnblogs.com/itlqs/p/5743114.html)
 
-[^ref2]: [最长不下降子序列 nlogn 算法详解 - lvmememe - 博客园](https://www.cnblogs.com/itlqs/p/5743114.html)
+[^ref1]: [位运算求最长公共子序列 - -Wallace- - 博客园](https://www.cnblogs.com/-Wallace-/p/bit-lcs.html)
