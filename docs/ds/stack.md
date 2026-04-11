@@ -27,11 +27,21 @@ LIFO 表达的是 **当前在容器** 内最后进来的最先出去．
 我们可以方便的使用数组来模拟一个栈，如下：
 
 ???+ note "实现"
-    === "C++"
-        ```cpp
-        int st[N];
-        // 这里使用 st[0] (即 *st) 代表栈中元素数量，同时也是栈顶下标
-        
+=== "C++"
+```cpp
+int st[N];
+// 这里使用 st[0] (即 \*st) 代表栈中元素数量，同时也是栈顶下标
+
+        // 压栈 ：
+        st[++*st] = var1;
+        // 取栈顶 ：
+        int u = st[*st];
+        // 弹栈 ：注意越界问题, *st == 0 时不能继续弹出
+        if (*st) --*st;
+        // 清空栈
+        *st = 0;
+        ```
+
     === "Java"
         ```java
         int[] st = new int[N];
@@ -69,13 +79,14 @@ LIFO 表达的是 **当前在容器** 内最后进来的最先出去．
 C++ 中的 STL 也提供了一个容器 `std::stack`，使用前需要引入 `stack` 头文件．
 
 ???+ info "STL 中对 `stack` 的定义"
-    ```cpp
+`cpp
     // clang-format off
     template<
         class T,
         class Container = std::deque<T>
     > class stack;
-    ```
+    `
+
     `T` 为 stack 中要存储的数据类型．
 
     `Container` 为用于存储元素的底层容器类型．这个容器必须提供通常语义的下列函数：
@@ -112,7 +123,7 @@ st2 = st1;
 // 输出 st2 的栈顶元素
 cout << st2.top() << endl;
 // 输出: 1
-````
+```
 
 ## 使用 Java 中的 Deque 模拟栈
 
@@ -120,36 +131,36 @@ cout << st2.top() << endl;
 
 ???+ note "实现"
 
-````java
+```java
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-    Deque<Integer> st = new ArrayDeque<>();
+Deque<Integer> st = new ArrayDeque<>();
 
-    // 使用 push() 向栈顶添加元素
-    st.push(2);
-    st.push(3);
-    // st: [3, 2]
+// 使用 push() 向栈顶添加元素
+st.push(2);
+st.push(3);
+// st: [3, 2]
 
-    // 使用 peek() 取栈顶元素
-    int u = st.peek();
+// 使用 peek() 取栈顶元素
+int u = st.peek();
 
-    // 使用 pop() 取出栈顶元素
-    st.pop();
-    // st: [2]
+// 使用 pop() 取出栈顶元素
+st.pop();
+// st: [2]
 
-    // 使用 clear() 清空栈
-    st.clear();
-    ```
+// 使用 clear() 清空栈
+st.clear();
+```
 
 ## 使用 Python 中的 list 模拟栈
 
 在 Python 中，你可以使用列表来模拟一个栈：
 
 ???+ note "实现"
-    ```python
-    st = [5, 1, 4]
-    
+```python
+st = [5, 1, 4]
+
     # 使用 append() 向栈顶添加元素
     st.append(2)
     st.append(3)
